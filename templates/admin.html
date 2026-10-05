@@ -20,16 +20,37 @@ td{color:#cbd5e1}
 .a-p{background:rgba(250,204,21,.2);color:#facc15}
 .a-d{background:rgba(34,197,94,.2);color:#22c55e}
 .a-c{background:rgba(239,68,68,.2);color:#ef4444}
+.a-e{background:rgba(59,130,246,.2);color:#60a5fa}
 .oid{color:#22c55e;font-weight:700}
 input,select{padding:9px;background:#0a1024;color:#fff;border:1px solid rgba(34,197,94,.3);border-radius:6px;font-size:13px;margin-right:6px;margin-bottom:6px}
 button{padding:9px 18px;background:linear-gradient(135deg,#22c55e,#16a34a);border:0;border-radius:6px;color:#fff;font-weight:700;cursor:pointer;font-size:13px}
 .del{color:#ef4444;text-decoration:none;font-weight:700}
+.edit{color:#60a5fa;text-decoration:none;font-weight:700;margin-right:8px}
 .empty{text-align:center;color:#64748b;padding:24px;font-size:13px}
+.flash{background:rgba(34,197,94,.15);border:1px solid #22c55e;padding:10px 16px;border-radius:8px;margin-bottom:15px;color:#22c55e;text-align:center}
+.edit-box{background:rgba(59,130,246,.08);border:1px solid #60a5fa;border-radius:10px;padding:16px;margin:12px 0}
+.edit-box h4{color:#60a5fa;font-size:14px;margin-bottom:12px}
 </style></head><body>
 <div class="wrap">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
 <h2>Admin Panel</h2><a href="/logout" class="logout">Logout</a>
 </div>
+
+{% with m = get_flashed_messages() %}{% if m %}{% for x in m %}<div class="flash">{{x}}</div>{% endfor %}{% endif %}{% endwith %}
+
+{% if edit_svc %}
+<div class="edit-box">
+<h4>✏️ Editing: {{edit_svc.name}} (ID: {{edit_svc.id}})</h4>
+<form method="POST" action="/admin/edit_service/{{edit_svc.id}}">
+<input name="cat" value="{{edit_svc.cat}}" placeholder="Category" required>
+<input name="name" value="{{edit_svc.name}}" placeholder="Service Name" required style="width:280px">
+<input name="price" type="number" step="0.01" value="{{edit_svc.price}}" placeholder="Price" required>
+<button type="submit">Save Changes</button>
+<a href="/admin" style="color:#64748b;text-decoration:none;margin-left:10px;font-size:13px">Cancel</a>
+</form>
+</div>
+{% endif %}
+
 <h3>📦 ORDERS ({{orders|length}})</h3>
 {% if orders %}
 <div style="overflow-x:auto">
@@ -39,17 +60,19 @@ button{padding:9px 18px;background:linear-gradient(135deg,#22c55e,#16a34a);borde
 <td class="acts"><a href="/admin/order/{{o.id}}/Pending" class="a-p">Pending</a><a href="/admin/order/{{o.id}}/Done" class="a-d">Done</a><a href="/admin/order/{{o.id}}/Cancelled" class="a-c">Cancel</a></td></tr>
 {% endfor %}</table></div>
 {% else %}<div class="empty">Abhi koi order nahi aaya.</div>{% endif %}
+
 <h3>🛠 SERVICES ({{services|length}})</h3>
 <form method="POST" action="/admin/add_service">
 <input name="cat" placeholder="Category" required>
 <input name="name" placeholder="Service Name" required>
-<input name="price" type="number" placeholder="Price" required>
+<input name="price" type="number" step="0.01" placeholder="Price" required>
 <button>+ Add Service</button>
 </form>
 <div style="overflow-x:auto;margin-top:12px">
-<table><tr><th>ID</th><th>Category</th><th>Name</th><th>Price</th><th>Del</th></tr>
-{% for s in services %}<tr><td>{{s.id}}</td><td>{{s.cat}}</td><td>{{s.name}}</td><td>Rs {{s.price}}</td><td><a href="/admin/del_service/{{s.id}}" class="del">🗑</a></td></tr>{% endfor %}
+<table><tr><th>ID</th><th>Category</th><th>Name</th><th>Price</th><th>Edit</th><th>Del</th></tr>
+{% for s in services %}<tr><td>{{s.id}}</td><td>{{s.cat}}</td><td>{{s.name}}</td><td>Rs {{s.price}}</td><td><a href="/admin?edit={{s.id}}" class="edit">✏️ Edit</a></td><td><a href="/admin/del_service/{{s.id}}" class="del">🗑</a></td></tr>{% endfor %}
 </table></div>
+
 <h3>👥 USERS ({{users|length}})</h3>
 {% if users %}
 <table><tr><th>Email</th></tr>

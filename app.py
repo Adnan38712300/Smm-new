@@ -21,7 +21,6 @@ PAYMENT_METHODS = {
     "easypaisa": {"name": "Easypaisa", "number": "Maintenance pr", "owner": "—"},
     "binance":   {"name": "Binance",   "number": "902574695",   "owner": "Binance ID"},
 }
-
 WHATSAPP = "03063871230"
 
 def init_data():
@@ -126,16 +125,9 @@ def place_order():
     charge = round((svc["price"]/1000) * qty, 2)
     oid = "ADN" + datetime.datetime.now().strftime("%y%m%d") + str(secrets.token_hex(2)).upper()
     d["orders"].append({
-        "id": oid,
-        "user": "guest",
-        "service": svc["name"],
-        "category": svc["cat"],
-        "link": link,
-        "qty": qty,
-        "charge": charge,
-        "method": method,
-        "status": "Pending",
-        "created": str(datetime.datetime.now())
+        "id": oid, "user": "guest", "service": svc["name"], "category": svc["cat"],
+        "link": link, "qty": qty, "charge": charge, "method": method,
+        "status": "Pending", "created": str(datetime.datetime.now())
     })
     save_data(d)
     return redirect(url_for("payment", oid=oid))
@@ -189,7 +181,11 @@ def admin_login():
 def admin_panel():
     d = load_data()
     orders = d["orders"][::-1]
-    return render_template("admin.html", orders=orders, services=d["services"], users=d["users"], methods=PAYMENT_METHODS)
+    edit_id = request.args.get("edit", type=int)
+    edit_svc = None
+    if edit_id:
+        edit_svc = next((s for s in d["services"] if s["id"]==edit_id), None)
+    return render_template("admin.html", orders=orders, services=d["services"], users=d["users"], methods=PAYMENT_METHODS, edit_svc=edit_svc)
 
 @app.route("/admin/order/<oid>/<status>")
 @admin_required
@@ -213,6 +209,19 @@ def add_service():
         "price": float(request.form.get("price",0))
     })
     save_data(d)
+    return redirect(url_for("admin_panel"))
+
+@app.route("/admin/edit_service/<int:sid>", methods=["POST"])
+@admin_required
+def edit_service(sid):
+    d = load_data()
+    for s in d["services"]:
+        if s["id"] == sid:
+            s["cat"] = request.form.get("cat", s["cat"])
+            s["name"] = request.form.get("name", s["name"])
+            s["price"] = float(request.form.get("price", s["price"]))
+    save_data(d)
+    flash("Service update ho gayi ✔")
     return redirect(url_for("admin_panel"))
 
 @app.route("/admin/del_service/<int:sid>")
