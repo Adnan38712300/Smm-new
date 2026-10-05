@@ -1,0 +1,23 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Dashboard</title>
+<style>body{background:#0a0a0f;color:#e0e0e0;font-family:Arial;padding:20px}
+h2{color:#00ff99}table{width:100%;border-collapse:collapse;margin-top:20px}
+th,td{padding:10px;border:1px solid #333;text-align:left}th{background:#1a1a2e;color:#00ff99}
+input,select{display:block;margin:8px 0;padding:10px;width:300px;border-radius:6px;border:1px solid #00ff99;background:#1a1a2e;color:#fff}
+button{padding:10px 24px;background:#00ff99;border:0;border-radius:6px;font-weight:bold;cursor:pointer}
+a{color:#00ff99}</style></head><body>
+<h2>Dashboard</h2>
+<p><a href="/logout">Logout</a> | <a href="/">Home</a> | <a href="/track">Track Order</a></p>
+<h3>Naya Order</h3>
+<form method="POST" action="/order">
+<select name="service_id" required>
+<option value="">-- Service --</option>
+{% for s in services %}<option value="{{s.id}}">{{s.cat}} - {{s.name}} (Rs {{s.price}}/1000)</option>{% endfor %}
+</select>
+<input name="link" placeholder="Link (profile/post URL)" required>
+<input name="quantity" type="number" placeholder="Quantity" value="1000" required>
+<button>Order Place Karo</button>
+</form>
+<h3>Mere Orders</h3>
+<table><tr><th>ID</th><th>Service</th><th>Qty</th><th>Charge</th><th>Status</th></tr>
+{% for o in orders %}<tr><td>{{o.id}}</td><td>{{o.service}}</td><td>{{o.qty}}</td><td>Rs {{o.charge}}</td><td>{{o.status}}</td></tr>{% endfor %}
+</table></body></html>

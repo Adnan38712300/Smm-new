@@ -1,0 +1,33 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Admin</title>
+<style>body{background:#0a0a0f;color:#e0e0e0;font-family:Arial;padding:20px}
+h2,h3{color:#00ff99}table{width:100%;border-collapse:collapse;margin:15px 0}
+th,td{padding:8px;border:1px solid #333;text-align:left}th{background:#1a1a2e;color:#00ff99}
+input,select{padding:8px;margin:4px;background:#1a1a2e;color:#fff;border:1px solid #00ff99;border-radius:6px}
+button{padding:8px 16px;background:#00ff99;border:0;border-radius:6px;font-weight:bold;cursor:pointer}
+a{color:#00ff99}</style></head><body>
+<h2>Admin Panel</h2>
+<p><a href="/logout">Logout</a></p>
+
+<h3>Orders</h3>
+<table><tr><th>ID</th><th>User</th><th>Service</th><th>Qty</th><th>Amount</th><th>Status</th><th>Action</th></tr>
+{% for o in orders %}
+<tr><td>{{o.id}}</td><td>{{o.user}}</td><td>{{o.service}}</td><td>{{o.qty}}</td><td>Rs {{o.charge}}</td><td>{{o.status}}</td>
+<td><a href="/admin/order/{{o.id}}/Complete">✔ Complete</a> | <a href="/admin/order/{{o.id}}/Cancelled">✘ Cancel</a></td></tr>
+{% endfor %}</table>
+
+<h3>Services</h3>
+<form method="POST" action="/admin/add_service">
+<input name="cat" placeholder="Category" required>
+<input name="name" placeholder="Service Name" required>
+<input name="price" type="number" placeholder="Price" required>
+<button>Add</button>
+</form>
+<table><tr><th>ID</th><th>Cat</th><th>Name</th><th>Price</th><th>Del</th></tr>
+{% for s in services %}
+<tr><td>{{s.id}}</td><td>{{s.cat}}</td><td>{{s.name}}</td><td>Rs {{s.price}}</td><td><a href="/admin/del_service/{{s.id}}">🗑</a></td></tr>
+{% endfor %}</table>
+
+<h3>Users</h3>
+<table><tr><th>Email</th></tr>
+{% for email in users %}<tr><td>{{email}}</td></tr>{% endfor %}
+</table></body></html>

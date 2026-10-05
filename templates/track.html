@@ -1,0 +1,16 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Track</title>
+<style>body{background:#0a0a0f;color:#e0e0e0;font-family:Arial;text-align:center;padding:60px}
+input{padding:12px;width:280px;border-radius:8px;border:1px solid #00ff99;background:#1a1a2e;color:#fff}
+button{padding:12px 30px;background:#00ff99;border:0;border-radius:8px;font-weight:bold;cursor:pointer}
+h2{color:#00ff99}a{color:#00ff99}</style></head><body>
+<h2>Track Order</h2>
+<form method="GET">
+<input name="oid" placeholder="Order ID" value="{{oid or ''}}" required>
+<button>Track</button>
+</form>
+{% if order %}
+<div style="margin-top:30px;background:#1a1a2e;padding:20px;border-radius:10px;display:inline-block;text-align:left">
+<b>Order:</b> {{order.id}}<br><b>Service:</b> {{order.service}}<br><b>Status:</b> <span style="color:#00ff99">{{order.status}}</span>
+</div>
+{% elif oid %}<p>Order nahi mila.</p>{% endif %}
+<p><a href="/">Home</a></p></body></html>
