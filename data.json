@@ -1,33 +1,198 @@
 {
-  "users": {},
-  "orders": [],
+  "users": {
+    "adnan3603874@gmail.com": {
+      "pw": "Adnan123",
+      "created": "2026-10-05 20:38:21.601201"
+    }
+  },
+  "orders": [
+    {
+      "id": "ADN261005DEA6",
+      "user": "guest",
+      "service": "Instagram Followers",
+      "category": "Instagram",
+      "link": "https://vt.tiktok.com/ZSbmYnDpn/",
+      "qty": 100,
+      "charge": 100.0,
+      "method": "jazzcash",
+      "status": "Pending",
+      "created": "2026-10-05 20:41:23.124805"
+    },
+    {
+      "id": "ADN261005B868",
+      "user": "guest",
+      "service": "TikTok Mix Followers",
+      "category": "TikTok",
+      "link": "https://vt.tiktok.com/ZSbmYnDpn/",
+      "qty": 100,
+      "charge": 460.0,
+      "method": "jazzcash",
+      "status": "Payment Submitted",
+      "created": "2026-10-05 20:42:46.493312"
+    }
+  ],
   "services": [
-    {"id":1,"cat":"TikTok","name":"TikTok Likes Pharming System","price":495},
-    {"id":2,"cat":"TikTok","name":"TikTok Pakistani Likes","price":750},
-    {"id":3,"cat":"TikTok","name":"TikTok Video For You","price":250},
-    {"id":4,"cat":"TikTok","name":"TikTok Mix Followers","price":4600},
-    {"id":5,"cat":"TikTok","name":"TikTok Pakistani Followers","price":2500},
-    {"id":6,"cat":"TikTok","name":"TikTok Followers Dropping Possible","price":600},
-    {"id":7,"cat":"TikTok","name":"TikTok Comments Random","price":1100},
-    {"id":8,"cat":"Instagram","name":"Instagram Followers","price":1000},
-    {"id":9,"cat":"Instagram","name":"Instagram Likes","price":50},
-    {"id":10,"cat":"Instagram","name":"Instagram Views","price":10},
-    {"id":11,"cat":"YouTube","name":"YouTube Subscribers Original Users","price":15000},
-    {"id":12,"cat":"YouTube","name":"YouTube Views","price":180},
-    {"id":13,"cat":"YouTube","name":"YouTube Likes","price":350},
-    {"id":14,"cat":"WhatsApp","name":"WhatsApp Pool Vote","price":450},
-    {"id":15,"cat":"WhatsApp","name":"WhatsApp Channel Members","price":150},
-    {"id":16,"cat":"WhatsApp","name":"WhatsApp Post React","price":350},
-    {"id":17,"cat":"Facebook","name":"Facebook Followers (Dropping Possible)","price":55},
-    {"id":18,"cat":"Facebook","name":"Facebook Post Reaction","price":50},
-    {"id":19,"cat":"Facebook","name":"Facebook Views","price":23},
-    {"id":20,"cat":"Facebook","name":"Facebook Comments","price":1140},
-    {"id":21,"cat":"Twitter","name":"Twitter Followers","price":1050},
-    {"id":22,"cat":"Twitter","name":"Twitter Likes","price":502},
-    {"id":23,"cat":"Twitter","name":"Twitter Views + Impression","price":10},
-    {"id":24,"cat":"Telegram","name":"Telegram Members","price":3200},
-    {"id":25,"cat":"Telegram","name":"Telegram Members (Dropping Possible)","price":290},
-    {"id":26,"cat":"Telegram","name":"Telegram React","price":10},
-    {"id":27,"cat":"Website","name":"Make Your Own Website","price":5000}
+    {
+      "id": 1,
+      "cat": "TikTok",
+      "name": "TikTok Likes Pharming System",
+      "price": 495
+    },
+    {
+      "id": 2,
+      "cat": "TikTok",
+      "name": "TikTok Pakistani Likes",
+      "price": 750
+    },
+    {
+      "id": 3,
+      "cat": "TikTok",
+      "name": "TikTok Video For You",
+      "price": 250
+    },
+    {
+      "id": 4,
+      "cat": "TikTok",
+      "name": "TikTok Mix Followers",
+      "price": 4600
+    },
+    {
+      "id": 5,
+      "cat": "TikTok",
+      "name": "TikTok Pakistani Followers",
+      "price": 2500
+    },
+    {
+      "id": 6,
+      "cat": "TikTok",
+      "name": "TikTok Followers Dropping Possible",
+      "price": 600
+    },
+    {
+      "id": 7,
+      "cat": "TikTok",
+      "name": "TikTok Comments Random",
+      "price": 1100
+    },
+    {
+      "id": 8,
+      "cat": "Instagram",
+      "name": "Instagram Followers",
+      "price": 1000
+    },
+    {
+      "id": 9,
+      "cat": "Instagram",
+      "name": "Instagram Likes",
+      "price": 50
+    },
+    {
+      "id": 10,
+      "cat": "Instagram",
+      "name": "Instagram Views",
+      "price": 10
+    },
+    {
+      "id": 11,
+      "cat": "YouTube",
+      "name": "YouTube Subscribers Original Users",
+      "price": 15000
+    },
+    {
+      "id": 12,
+      "cat": "YouTube",
+      "name": "YouTube Views",
+      "price": 180
+    },
+    {
+      "id": 13,
+      "cat": "YouTube",
+      "name": "YouTube Likes",
+      "price": 350
+    },
+    {
+      "id": 14,
+      "cat": "WhatsApp",
+      "name": "WhatsApp Pool Vote",
+      "price": 450
+    },
+    {
+      "id": 15,
+      "cat": "WhatsApp",
+      "name": "WhatsApp Channel Members",
+      "price": 150
+    },
+    {
+      "id": 16,
+      "cat": "WhatsApp",
+      "name": "WhatsApp Post React",
+      "price": 350
+    },
+    {
+      "id": 17,
+      "cat": "Facebook",
+      "name": "Facebook Followers (Dropping Possible)",
+      "price": 55
+    },
+    {
+      "id": 18,
+      "cat": "Facebook",
+      "name": "Facebook Post Reaction",
+      "price": 50
+    },
+    {
+      "id": 19,
+      "cat": "Facebook",
+      "name": "Facebook Views",
+      "price": 23
+    },
+    {
+      "id": 20,
+      "cat": "Facebook",
+      "name": "Facebook Comments",
+      "price": 1140
+    },
+    {
+      "id": 21,
+      "cat": "Twitter",
+      "name": "Twitter Followers",
+      "price": 1050
+    },
+    {
+      "id": 22,
+      "cat": "Twitter",
+      "name": "Twitter Likes",
+      "price": 502
+    },
+    {
+      "id": 23,
+      "cat": "Twitter",
+      "name": "Twitter Views + Impression",
+      "price": 10
+    },
+    {
+      "id": 24,
+      "cat": "Telegram",
+      "name": "Telegram Members",
+      "price": 3200
+    },
+    {
+      "id": 25,
+      "cat": "Telegram",
+      "name": "Telegram Members (Dropping Possible)",
+      "price": 290
+    },
+    {
+      "id": 26,
+      "cat": "Telegram",
+      "name": "Telegram React",
+      "price": 10
+    },
+    {
+      "id": 27,
+      "cat": "Website",
+      "name": "Make Your Own Website",
+      "price": 5000
+    }
   ]
 }

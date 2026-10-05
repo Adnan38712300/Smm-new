@@ -8,7 +8,6 @@ app.secret_key = secrets.token_hex(32)
 ADMIN_USER = "Adnan3871"
 ADMIN_PASS = "Adnan123@"
 
-# Vercel pe /tmp use karo, Termux pe local file
 def get_data_path():
     if os.path.exists("/tmp") and os.access("/tmp", os.W_OK):
         return "/tmp/data.json"
@@ -16,6 +15,14 @@ def get_data_path():
 
 DATA_FILE = os.path.join(os.path.dirname(__file__), "data.json")
 TMP_DATA = get_data_path()
+
+PAYMENT_METHODS = {
+    "jazzcash":  {"name": "JazzCash",  "number": "03037678443", "owner": "Abdul Majeed"},
+    "easypaisa": {"name": "Easypaisa", "number": "Maintenance pr", "owner": "—"},
+    "binance":   {"name": "Binance",   "number": "902574695",   "owner": "Binance ID"},
+}
+
+WHATSAPP = "03063871230"
 
 def init_data():
     data = {
@@ -71,14 +78,6 @@ def save_data(d):
     with open(TMP_DATA, "w") as f:
         json.dump(d, f, indent=2)
 
-def login_required(f):
-    @wraps(f)
-    def wrap(*a, **k):
-        if not session.get("user") and not session.get("admin"):
-            return redirect(url_for("login"))
-        return f(*a, **k)
-    return wrap
-
 def admin_required(f):
     @wraps(f)
     def wrap(*a, **k):
@@ -87,92 +86,93 @@ def admin_required(f):
         return f(*a, **k)
     return wrap
 
+def link_label(svc):
+    n = svc["name"].lower()
+    if any(k in n for k in ["like","view","comment","react","impression","vote"]):
+        return "Video / Post Link"
+    if any(k in n for k in ["follower","subscriber","member","channel"]):
+        return "Account / Channel Link"
+    if "website" in n:
+        return "Apni Business ki Detail"
+    return "Link"
+
+# ===== PUBLIC =====
 @app.route("/")
 def home():
     d = load_data()
     return render_template("index.html", services=d["services"])
 
-@app.route("/signup", methods=["GET","POST"])
-def signup():
-    if request.method == "POST":
-        email = request.form.get("email","").strip().lower()
-        pw = request.form.get("password","")
-        d = load_data()
-        if email in d["users"]:
-            flash("Email already exists")
-            return redirect(url_for("signup"))
-        d["users"][email] = {"pw": pw, "created": str(datetime.datetime.now())}
-        save_data(d)
-        flash("Account ban gaya. Login karo.")
-        return redirect(url_for("login"))
-    return render_template("signup.html")
-
-@app.route("/login", methods=["GET","POST"])
-def login():
-    if request.method == "POST":
-        email = request.form.get("email","").strip().lower()
-        pw = request.form.get("password","")
-        d = load_data()
-        if email in d["users"] and d["users"][email]["pw"] == pw:
-            session["user"] = email
-            return redirect(url_for("dashboard"))
-        flash("Ghalat email ya password")
-    return render_template("login.html")
-
-@app.route("/logout")
-def logout():
-    session.clear()
-    return redirect(url_for("home"))
-
-@app.route("/dashboard")
-@login_required
-def dashboard():
+# ===== ORDER FLOW (NO LOGIN) =====
+@app.route("/order/<int:sid>")
+def order_page(sid):
     d = load_data()
-    user = session.get("user")
-    my_orders = [o for o in d["orders"] if o["user"] == user]
-    return render_template("dashboard.html", orders=my_orders, services=d["services"])
-
-@app.route("/order", methods=["POST"])
-@login_required
-def place_order():
-    d = load_data()
-    sid = int(request.form.get("service_id"))
-    link = request.form.get("link","")
-    qty = int(request.form.get("quantity",100))
     svc = next((s for s in d["services"] if s["id"]==sid), None)
     if not svc:
         flash("Service nahi mili")
-        return redirect(url_for("dashboard"))
-    charge = (svc["price"] / 1000) * qty
-    oid = "ORD" + str(secrets.token_hex(4)).upper()
+        return redirect(url_for("home"))
+    return render_template("order.html", svc=svc, methods=PAYMENT_METHODS, label=link_label(svc))
+
+@app.route("/place_order", methods=["POST"])
+def place_order():
+    d = load_data()
+    sid = int(request.form.get("service_id"))
+    link = request.form.get("link","").strip()
+    qty = int(request.form.get("quantity",100))
+    method = request.form.get("method","jazzcash")
+    svc = next((s for s in d["services"] if s["id"]==sid), None)
+    if not svc:
+        flash("Service nahi mili")
+        return redirect(url_for("home"))
+    charge = round((svc["price"]/1000) * qty, 2)
+    oid = "ADN" + datetime.datetime.now().strftime("%y%m%d") + str(secrets.token_hex(2)).upper()
     d["orders"].append({
-        "id": oid, "user": session["user"], "service": svc["name"],
-        "link": link, "qty": qty, "charge": round(charge, 2),
-        "status": "Pending", "created": str(datetime.datetime.now())
+        "id": oid,
+        "user": "guest",
+        "service": svc["name"],
+        "category": svc["cat"],
+        "link": link,
+        "qty": qty,
+        "charge": charge,
+        "method": method,
+        "status": "Pending",
+        "created": str(datetime.datetime.now())
     })
     save_data(d)
-    flash(f"Order {oid} place ho gaya.")
     return redirect(url_for("payment", oid=oid))
 
 @app.route("/payment/<oid>")
-@login_required
 def payment(oid):
     d = load_data()
     order = next((o for o in d["orders"] if o["id"]==oid), None)
     if not order:
         flash("Order nahi mila")
-        return redirect(url_for("dashboard"))
-    return render_template("payment.html", order=order)
+        return redirect(url_for("home"))
+    method = PAYMENT_METHODS.get(order.get("method","jazzcash"), PAYMENT_METHODS["jazzcash"])
+    return render_template("payment.html", order=order, method=method, whatsapp=WHATSAPP)
+
+@app.route("/payment_done/<oid>")
+def payment_done(oid):
+    d = load_data()
+    for o in d["orders"]:
+        if o["id"]==oid:
+            o["status"] = "Payment Submitted"
+    save_data(d)
+    return redirect(url_for("success", oid=oid))
+
+@app.route("/success/<oid>")
+def success(oid):
+    return render_template("success.html", oid=oid)
 
 @app.route("/track")
 def track():
-    oid = request.args.get("oid","")
+    oid = request.args.get("oid","").strip()
     order = None
     if oid:
         d = load_data()
         order = next((o for o in d["orders"] if o["id"]==oid), None)
     return render_template("track.html", order=order, oid=oid)
 
+# ===== ADMIN =====
 @app.route("/admin/login", methods=["GET","POST"])
 def admin_login():
     if request.method == "POST":
@@ -188,7 +188,8 @@ def admin_login():
 @admin_required
 def admin_panel():
     d = load_data()
-    return render_template("admin.html", orders=d["orders"], services=d["services"], users=d["users"])
+    orders = d["orders"][::-1]
+    return render_template("admin.html", orders=orders, services=d["services"], users=d["users"], methods=PAYMENT_METHODS)
 
 @app.route("/admin/order/<oid>/<status>")
 @admin_required
@@ -221,6 +222,11 @@ def del_service(sid):
     d["services"] = [s for s in d["services"] if s["id"] != sid]
     save_data(d)
     return redirect(url_for("admin_panel"))
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("home"))
 
 try:
     load_data()
