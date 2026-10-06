@@ -1,9 +1,11 @@
 import os, json, secrets, datetime, shutil
+from datetime import timedelta
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(32)
+app.permanent_session_lifetime = timedelta(days=365)
 
 ADMIN_USER = "Adnan3871"
 ADMIN_PASS = "Adnan123@"
@@ -22,6 +24,7 @@ PAYMENT_METHODS = {
     "binance":   {"name": "Binance",   "number": "902574695",   "owner": "Binance ID"},
 }
 WHATSAPP = "03063871230"
+SENIOR_THRESHOLD = 10000
 
 def init_data():
     data = {
@@ -77,6 +80,14 @@ def save_data(d):
     with open(TMP_DATA, "w") as f:
         json.dump(d, f, indent=2)
 
+def login_required(f):
+    @wraps(f)
+    def wrap(*a, **k):
+        if not session.get("user"):
+            return redirect(url_for("login"))
+        return f(*a, **k)
+    return wrap
+
 def admin_required(f):
     @wraps(f)
     def wrap(*a, **k):
@@ -95,14 +106,67 @@ def link_label(svc):
         return "Apni Business ki Detail"
     return "Link"
 
+def get_user_stats(d, user):
+    user_orders = [o for o in d["orders"] if o["user"] == user]
+    total_spent = round(sum(o.get("charge",0) for o in user_orders), 2)
+    total_orders_all = 1247 + len(d["orders"])
+    balance = round(d["users"].get(user, {}).get("balance", 0), 2)
+    status = "SENIOR" if total_spent > SENIOR_THRESHOLD else "JUNIOR"
+    return {
+        "total_spent": total_spent,
+        "total_orders": total_orders_all,
+        "balance": balance,
+        "status": status
+    }
+
+# ===== AUTH =====
+@app.route("/login", methods=["GET","POST"])
+def login():
+    if request.method == "POST":
+        email = request.form.get("email","").strip().lower()
+        pw = request.form.get("password","")
+        d = load_data()
+        if email in d["users"] and d["users"][email]["pw"] == pw:
+            session.permanent = True
+            session["user"] = email
+            return redirect(url_for("home"))
+        flash("Ghalat email ya password")
+    return render_template("login.html")
+
+@app.route("/signup", methods=["GET","POST"])
+def signup():
+    if request.method == "POST":
+        email = request.form.get("email","").strip().lower()
+        pw = request.form.get("password","")
+        d = load_data()
+        if not email or not pw:
+            flash("Email aur password dono chahiye")
+            return redirect(url_for("signup"))
+        if email in d["users"]:
+            flash("Ye email already registered hai. Login karo.")
+            return redirect(url_for("login"))
+        d["users"][email] = {"pw": pw, "balance": 0, "created": str(datetime.datetime.now())}
+        save_data(d)
+        session.permanent = True
+        session["user"] = email
+        return redirect(url_for("home"))
+    return render_template("signup.html")
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
+
 # ===== PUBLIC =====
 @app.route("/")
+@login_required
 def home():
     d = load_data()
-    return render_template("index.html", services=d["services"])
+    stats = get_user_stats(d, session["user"])
+    return render_template("index.html", services=d["services"], stats=stats)
 
-# ===== ORDER FLOW (NO LOGIN) =====
 @app.route("/order/<int:sid>")
+@login_required
 def order_page(sid):
     d = load_data()
     svc = next((s for s in d["services"] if s["id"]==sid), None)
@@ -112,6 +176,7 @@ def order_page(sid):
     return render_template("order.html", svc=svc, methods=PAYMENT_METHODS, label=link_label(svc))
 
 @app.route("/place_order", methods=["POST"])
+@login_required
 def place_order():
     d = load_data()
     sid = int(request.form.get("service_id"))
@@ -125,7 +190,7 @@ def place_order():
     charge = round((svc["price"]/1000) * qty, 2)
     oid = "ADN" + datetime.datetime.now().strftime("%y%m%d") + str(secrets.token_hex(2)).upper()
     d["orders"].append({
-        "id": oid, "user": "guest", "service": svc["name"], "category": svc["cat"],
+        "id": oid, "user": session["user"], "service": svc["name"], "category": svc["cat"],
         "link": link, "qty": qty, "charge": charge, "method": method,
         "status": "Pending", "created": str(datetime.datetime.now())
     })
@@ -133,6 +198,7 @@ def place_order():
     return redirect(url_for("payment", oid=oid))
 
 @app.route("/payment/<oid>")
+@login_required
 def payment(oid):
     d = load_data()
     order = next((o for o in d["orders"] if o["id"]==oid), None)
@@ -143,6 +209,7 @@ def payment(oid):
     return render_template("payment.html", order=order, method=method, whatsapp=WHATSAPP)
 
 @app.route("/payment_done/<oid>")
+@login_required
 def payment_done(oid):
     d = load_data()
     for o in d["orders"]:
@@ -152,10 +219,12 @@ def payment_done(oid):
     return redirect(url_for("success", oid=oid))
 
 @app.route("/success/<oid>")
+@login_required
 def success(oid):
     return render_template("success.html", oid=oid)
 
 @app.route("/track")
+@login_required
 def track():
     oid = request.args.get("oid","").strip()
     order = None
@@ -163,6 +232,14 @@ def track():
         d = load_data()
         order = next((o for o in d["orders"] if o["id"]==oid), None)
     return render_template("track.html", order=order, oid=oid)
+
+@app.route("/my_orders")
+@login_required
+def my_orders():
+    d = load_data()
+    orders = [o for o in d["orders"] if o["user"] == session["user"]][::-1]
+    stats = get_user_stats(d, session["user"])
+    return render_template("my_orders.html", orders=orders, stats=stats)
 
 # ===== ADMIN =====
 @app.route("/admin/login", methods=["GET","POST"])
@@ -232,10 +309,17 @@ def del_service(sid):
     save_data(d)
     return redirect(url_for("admin_panel"))
 
-@app.route("/logout")
-def logout():
-    session.clear()
-    return redirect(url_for("home"))
+@app.route("/admin/user/<email>/balance", methods=["POST"])
+@admin_required
+def user_balance(email):
+    d = load_data()
+    amt = float(request.form.get("amount", 0))
+    if email in d["users"]:
+        cur = d["users"][email].get("balance", 0)
+        d["users"][email]["balance"] = round(cur + amt, 2)
+        save_data(d)
+        flash(f"{email} ka balance update ho gaya")
+    return redirect(url_for("admin_panel"))
 
 try:
     load_data()
