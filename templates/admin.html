@@ -68,7 +68,7 @@ button{padding:9px 18px;background:linear-gradient(135deg,#22c55e,#16a34a);borde
 {% for o in orders %}
 <tr>
 <td class="oid">{{o.id}}</td>
-<td>{{o.username|default(o.user)}}</td>
+<td>{{o.username or o.user.split("@")[0]}}</td>
 <td class="wallet">Rs {{ users.get(o.user, {}).get('balance', 0) }}</td>
 <td>{{o.service}}</td>
 <td class="link-cell"><a href="{{o.link}}" target="_blank">{{o.link}}</a></td>
@@ -135,7 +135,7 @@ button{padding:9px 18px;background:linear-gradient(135deg,#22c55e,#16a34a);borde
 {% for p in payments %}
 <tr>
 <td class="oid">{{p.id}}</td>
-<td>{{p.username|default(p.user.split('@')[0])}}</td>
+<td>{{p.username or p.user.split("@")[0]}}</td>
 <td style="font-size:12px">{{p.email|default(p.user)}}</td>
 <td>{{p.method|upper}}</td>
 <td class="wallet">Rs {{p.amount}}</td>

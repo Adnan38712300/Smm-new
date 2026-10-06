@@ -20,12 +20,16 @@ input:focus{border-color:#22c55e}
 .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.active{display:flex}
 .modal{background:#0f172a;border:1px solid rgba(34,197,94,.4);border-radius:18px;padding:26px;max-width:420px;width:100%;text-align:center}
+.modal.error{border-color:rgba(239,68,68,.5)}
 .modal .icon{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#22c55e,#16a34a);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:44px;color:#fff}
+.modal.error .icon{background:linear-gradient(135deg,#ef4444,#b91c1c)}
 .modal h3{color:#22c55e;font-size:20px;font-weight:800;margin-bottom:12px}
+.modal.error h3{color:#ef4444}
 .modal p{color:#cbd5e1;font-size:14px;line-height:1.7;margin-bottom:10px}
-.modal .wa{color:#facc15;font-weight:800;background:rgba(250,204,21,.15);padding:6px 14px;border-radius:8px;display:inline-block;margin:8px 0;font-size:15px}
 .modal .oid{color:#22c55e;font-weight:800;font-size:14px;letter-spacing:1px;margin:8px 0}
+.modal .bal{background:rgba(250,204,21,.15);border:1px solid #facc15;padding:8px 14px;border-radius:8px;color:#facc15;font-weight:800;display:inline-block;margin:10px 0}
 .modal button{padding:12px 28px;background:linear-gradient(135deg,#22c55e,#16a34a);border:0;border-radius:10px;color:#fff;font-weight:800;cursor:pointer;font-size:14px;margin-top:14px;width:100%}
+.modal.error button{background:linear-gradient(135deg,#ef4444,#b91c1c)}
 </style></head><body>
 <div class="box">
 <h2>{{ svc.name }}</h2>
@@ -44,15 +48,26 @@ input:focus{border-color:#22c55e}
 </form>
 </div>
 
-<div class="modal-overlay" id="confirmModal">
+<div class="modal-overlay" id="successModal">
 <div class="modal">
 <div class="icon">✓</div>
 <h3>Order Confirmed!</h3>
 <p class="oid" id="modalOid"></p>
-<p>Aap ka order successfully submit ho gaya hai.</p>
-<p style="margin-top:14px">Payment ke liye apna <b>username</b> aur <b>payment screenshot</b> WhatsApp karo:</p>
-<p class="wa">03063871230</p>
+<p>Aap ka order successfully submit ho gaya hai. Balance se payment deduct ho gayi hai.</p>
+<p style="font-size:13px;margin-top:6px">Status "My Orders" mein check karte raho.</p>
 <button onclick="window.location.href='/'">OK, Home</button>
+</div>
+</div>
+
+<div class="modal-overlay" id="errorModal">
+<div class="modal error">
+<div class="icon">✕</div>
+<h3>Insufficient Balance</h3>
+<p>Aap ka balance is order ke liye kaafi nahi hai.</p>
+<p class="bal">Balance: Rs <span id="curBal">0</span></p>
+<p style="font-size:13px">Pehle "Add Funds" se balance barhao, phir order karo.</p>
+<button onclick="window.location.href='/add_funds'">Add Funds</button>
+<button onclick="document.getElementById('errorModal').classList.remove('active')" style="background:#334155;margin-top:8px">Cancel</button>
 </div>
 </div>
 
@@ -62,12 +77,21 @@ function calc(){var q=parseInt(document.getElementById('qty').value)||0;document
 calc();
 document.getElementById('orderForm').addEventListener('submit',function(e){
   e.preventDefault();
-  var form=this;
-  var fd=new FormData(form);
-  fetch('/place_order',{method:'POST',body:fd}).then(function(){
-    document.getElementById('modalOid').innerText='Order placed successfully!';
-    document.getElementById('confirmModal').classList.add('active');
-  });
+  var fd=new FormData(this);
+  fetch('/place_order',{method:'POST',body:fd})
+  .then(function(r){return r.json().then(function(d){return {ok:r.ok,data:d};});})
+  .then(function(res){
+    if(res.ok && res.data.ok){
+      document.getElementById('modalOid').innerText='Order ID: '+res.data.oid;
+      document.getElementById('successModal').classList.add('active');
+    } else if(res.data.error==='insufficient'){
+      document.getElementById('curBal').innerText=res.data.balance;
+      document.getElementById('errorModal').classList.add('active');
+    } else {
+      alert(res.data.error||'Error');
+    }
+  })
+  .catch(function(){alert('Network error');});
 });
 </script>
 </body></html>

@@ -1,6 +1,6 @@
 import os, json, secrets, datetime, shutil
 from datetime import timedelta
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from functools import wraps
 
 app = Flask(__name__)
@@ -229,18 +229,24 @@ def place_order():
     link = request.form.get("link","").strip()
     qty = int(request.form.get("quantity",100))
     svc = next((s for s in d["services"] if s["id"]==sid), None)
-    if not svc: flash("Service nahi mili"); return redirect(url_for("home"))
+    if not svc:
+        return jsonify({"error":"Service nahi mili"}), 400
     charge = round((svc["price"]/1000) * qty, 2)
+    user = session["user"]
+    balance = d["users"].get(user, {}).get("balance", 0)
+    if balance < charge:
+        return jsonify({"error":"insufficient","balance":balance,"needed":charge}), 400
+    d["users"][user]["balance"] = round(balance - charge, 2)
     oid = "ADN" + datetime.datetime.now().strftime("%y%m%d") + str(secrets.token_hex(2)).upper()
     d["orders"].append({
-        "id": oid, "user": session["user"],
-        "username": d["users"][session["user"]].get("username",""),
+        "id": oid, "user": user,
+        "username": d["users"][user].get("username", user.split("@")[0]),
         "service": svc["name"], "category": svc["cat"],
         "link": link, "qty": qty, "charge": charge,
         "status": "Waiting", "created": str(datetime.datetime.now())
     })
     save_data(d)
-    return redirect(url_for("home") + f"?order_placed={oid}")
+    return jsonify({"ok":True, "oid":oid, "balance": d["users"][user]["balance"]})
 
 @app.route("/my_orders")
 @login_required
