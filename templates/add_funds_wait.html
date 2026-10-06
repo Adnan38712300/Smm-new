@@ -1,0 +1,26 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Waiting</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:linear-gradient(180deg,#02020a,#0a0a2e,#0d0d28);color:#e8ecf4;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.box{max-width:460px;width:100%;background:rgba(10,15,40,.95);backdrop-filter:blur(12px);border:1px solid rgba(250,204,21,.4);border-radius:20px;padding:36px 26px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.spinner{width:90px;height:90px;border:5px solid rgba(250,204,21,.2);border-top-color:#facc15;border-radius:50%;margin:0 auto 24px;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+h2{color:#facc15;font-size:20px;font-weight:800;margin-bottom:14px}
+p{color:#cbd5e1;font-size:14px;line-height:1.7;margin-bottom:12px}
+.oid{color:#22c55e;font-weight:800;font-size:15px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);padding:10px;border-radius:10px;display:inline-block;margin:10px 0 18px;letter-spacing:1px}
+.auto{color:#94a3b8;font-size:12px;margin-top:16px}
+</style></head><body>
+<div class="box">
+<div class="spinner"></div>
+<h2>Waiting for Admin Approval</h2>
+<div class="oid">{{ pid }}</div>
+<p>Aap ki payment request submit ho gayi hai.</p>
+<p>Admin jald hi verify karke aap ka balance add kar dega.</p>
+<p class="auto">⏱️ 10 seconds mein automatic home page pe redirect ho jayega...</p>
+</div>
+<script>
+setTimeout(function(){ window.location.href = "/"; }, 10000);
+</script>
+</body></html>

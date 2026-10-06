@@ -3,35 +3,36 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:linear-gradient(180deg,#070b18,#0d1428);color:#e8ecf4;min-height:100vh;padding:20px}
+body{font-family:'Inter',sans-serif;background:linear-gradient(180deg,#02020a,#0a0a2e,#0d0d28);color:#e8ecf4;min-height:100vh;padding:20px}
 .wrap{max-width:900px;margin:0 auto}
 .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
 h2{color:#22c55e;font-size:20px}
 .top a{color:#22c55e;text-decoration:none;font-weight:600;font-size:13px}
 .stats-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
-.mini{background:rgba(15,23,42,.9);border:1px solid rgba(34,197,94,.2);border-radius:12px;padding:12px;text-align:center}
+.mini{background:rgba(10,15,40,.9);border:1px solid rgba(34,197,94,.2);border-radius:12px;padding:12px;text-align:center}
 .mini .l{color:#94a3b8;font-size:10px;letter-spacing:1px;font-weight:600;text-transform:uppercase;margin-bottom:6px}
 .mini .v{color:#22c55e;font-size:16px;font-weight:800}
-table{width:100%;border-collapse:collapse;background:rgba(15,23,42,.9);border-radius:12px;overflow:hidden;font-size:13px}
+table{width:100%;border-collapse:collapse;background:rgba(10,15,40,.9);border-radius:12px;overflow:hidden;font-size:13px;border:1px solid rgba(34,197,94,.15)}
 th,td{padding:10px;text-align:left;border-bottom:1px solid rgba(255,255,255,.05)}
 th{background:rgba(34,197,94,.15);color:#22c55e;font-weight:700;font-size:12px}
 td{color:#cbd5e1}
 .st{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;white-space:nowrap}
-.st-Pending{background:rgba(250,204,21,.15);color:#facc15}
-.st-Done{background:rgba(34,197,94,.15);color:#22c55e}
+.st-Waiting,.st-Pending{background:rgba(250,204,21,.15);color:#facc15}
+.st-Processing{background:rgba(168,85,247,.15);color:#c084fc}
+.st-Done,.st-Complete{background:rgba(34,197,94,.15);color:#22c55e}
 .st-Cancelled{background:rgba(239,68,68,.15);color:#ef4444}
-.empty{text-align:center;color:#64748b;padding:30px;font-size:14px}
-.btn{display:inline-block;padding:10px 20px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:8px;color:#fff;text-decoration:none;font-weight:700;font-size:13px;margin-top:14px}
+.empty{text-align:center;color:#64748b;padding:30px;font-size:14px;background:rgba(10,15,40,.6);border-radius:12px;border:1px dashed rgba(34,197,94,.2)}
+.overflow{overflow-x:auto}
 </style></head><body>
 <div class="wrap">
-<div class="top"><h2>My Orders</h2><a href="/">← Home</a></div>
+<div class="top"><h2>📋 My Orders</h2><a href="/">← Home</a></div>
 <div class="stats-mini">
 <div class="mini"><div class="l">Spent</div><div class="v">Rs {{ stats.total_spent }}</div></div>
-<div class="mini"><div class="l">Orders</div><div class="v">{{ orders|length }}</div></div>
+<div class="mini"><div class="l">My Orders</div><div class="v">{{ orders|length }}</div></div>
 <div class="mini"><div class="l">Balance</div><div class="v">Rs {{ stats.balance }}</div></div>
 </div>
 {% if orders %}
-<div style="overflow-x:auto">
+<div class="overflow">
 <table><tr><th>Order ID</th><th>Service</th><th>Qty</th><th>Amount</th><th>Status</th></tr>
 {% for o in orders %}<tr><td style="color:#22c55e;font-weight:700">{{o.id}}</td><td>{{o.service}}</td><td>{{o.qty}}</td><td>Rs {{o.charge}}</td><td><span class="st st-{{o.status|replace(' ','-')}}">{{o.status}}</span></td></tr>{% endfor %}
 </table></div>

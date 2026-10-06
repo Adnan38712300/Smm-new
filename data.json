@@ -198,5 +198,27 @@
       "name": "Make Your Own Website",
       "price": 5000
     }
+  ],
+  "payments": [
+    {
+      "id": "PAY2610065574",
+      "user": "adnanjani7281179@gmail.com",
+      "username": "",
+      "email": "adnanjani7281179@gmail.com",
+      "method": "jazzcash",
+      "amount": 10.0,
+      "status": "Pending",
+      "created": "2026-10-06 20:04:02.798671"
+    },
+    {
+      "id": "PAY261006C752",
+      "user": "adnanjani7281179@gmail.com",
+      "username": "",
+      "email": "adnanjani7281179@gmail.com",
+      "method": "jazzcash",
+      "amount": 10.0,
+      "status": "Pending",
+      "created": "2026-10-06 20:07:58.697067"
+    }
   ]
 }
