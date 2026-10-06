@@ -1,0 +1,31 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thank You</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:linear-gradient(180deg,#02020a,#0a0a2e,#0d0d28);color:#e8ecf4;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.box{max-width:440px;width:100%;background:rgba(10,15,40,.95);border:1px solid rgba(34,197,94,.4);border-radius:20px;padding:36px 26px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.tick{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,#22c55e,#16a34a);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;font-size:50px;color:#fff;box-shadow:0 0 50px rgba(34,197,94,.6)}
+h2{color:#22c55e;font-size:22px;font-weight:800;margin-bottom:12px}
+p{color:#cbd5e1;font-size:14px;line-height:1.7;margin-bottom:10px}
+.note{background:rgba(250,204,21,.1);border:1px solid #facc15;border-radius:12px;padding:14px;margin:18px 0;text-align:left}
+.note .t{color:#facc15;font-weight:800;font-size:13px;margin-bottom:6px}
+.note p{color:#e2e8f0;font-size:13px;margin-bottom:6px}
+.auto{color:#94a3b8;font-size:12px;margin-top:16px}
+</style></head><body>
+<div class="box">
+<div class="tick">✓</div>
+<h2>Payment Submitted</h2>
+<p>Aap ki payment request admin ke paas chali gayi hai.</p>
+<div class="note">
+<div class="t">⏳ What's next?</div>
+<p>Admin aap ki payment verify karke <b>balance add</b> kar dega.</p>
+<p>Ye usually 5-30 minute mein hota hai.</p>
+</div>
+<p style="color:#facc15;font-size:13px;font-weight:600">WhatsApp app khul raha hai... "Send" dabana mat bhoolna!</p>
+<p class="auto">10 seconds mein home page pe redirect ho jayega...</p>
+</div>
+<script>
+setTimeout(function(){ window.location.href = "/"; }, 10000);
+</script>
+</body></html>

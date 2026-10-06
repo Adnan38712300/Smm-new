@@ -201,7 +201,27 @@ def add_funds_pay(pid):
     pay = next((p for p in d["payments"] if p["id"]==pid), None)
     if not pay: flash("Payment nahi mila"); return redirect(url_for("home"))
     method = PAYMENT_METHODS[pay["method"]]
-    return render_template("add_funds_pay.html", pay=pay, method=method, whatsapp=WHATSAPP)
+    user_obj = d["users"].get(session["user"], {})
+    username = user_obj.get("username", session["user"].split("@")[0])
+    return render_template("add_funds_pay.html", pay=pay, method=method, whatsapp=WHATSAPP, username=username, useremail=session["user"])
+
+@app.route("/add_funds/submit_trx/<pid>", methods=["POST"])
+@login_required
+def add_funds_submit_trx(pid):
+    d = load_data()
+    for p in d["payments"]:
+        if p["id"]==pid:
+            p["trx_id"] = request.form.get("trx_id","").strip()
+            p["username"] = request.form.get("username","").strip()
+            p["email"] = request.form.get("email","").strip()
+            p["status"] = "Paid"
+    save_data(d)
+    return jsonify({"ok": True})
+
+@app.route("/add_funds/thankyou/<pid>")
+@login_required
+def add_funds_thankyou(pid):
+    return render_template("thankyou.html", pid=pid)
 
 @app.route("/add_funds/done/<pid>")
 @login_required
