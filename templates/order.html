@@ -37,8 +37,8 @@ input:focus{border-color:#22c55e}
 <form method="POST" action="/place_order" id="orderForm">
 <input type="hidden" name="service_id" value="{{svc.id}}">
 <label>{{ label }}</label>
-<input name="link" placeholder="https://..." required>
-<label>Quantity (min 100)</label>
+<input name="link" placeholder="{% if 'website' in svc.name.lower() %}03XXXXXXXXX (WhatsApp Number){% else %}https://...{% endif %}" required>
+<label>Quantity (min {{ svc.min_qty or 50 }}, max {{ svc.max_qty or 10000 }})</label>
 <input name="quantity" id="qty" type="number" value="1000" min="100" required oninput="calc()">
 <div class="total"><span>Total Price</span><span class="amt">Rs <span id="total">0</span></span></div>
 <div class="btns">

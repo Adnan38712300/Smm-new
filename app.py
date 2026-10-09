@@ -85,7 +85,7 @@ def init_data():
             {"id":24,"cat":"Telegram","name":"Telegram Members","price":3200},
             {"id":25,"cat":"Telegram","name":"Telegram Members (Dropping Possible)","price":290},
             {"id":26,"cat":"Telegram","name":"Telegram React","price":10},
-            {"id":27,"cat":"Website","name":"Make Your Own Website","price":5000},
+            {"id":27,"cat":"Website","name":"Make Your Own Website","price":5000,"min_qty":1,"max_qty":2999},
             {"id":28,"cat":"TikTok","name":"TikTok Video Save","price":8,"min_qty":50,"max_qty":10000},
             {"id":29,"cat":"TikTok","name":"TikTok Video Shares","price":59,"min_qty":50,"max_qty":10000},
             {"id":30,"cat":"TikTok","name":"TikTok Live Stream Views","price":352,"min_qty":50,"max_qty":10000},
@@ -151,9 +151,9 @@ def get_user_stats(d, user):
 
 def link_label(svc):
     n = svc["name"].lower()
-    if any(k in n for k in ["like","view","comment","react","impression","vote"]): return "Video / Post Link"
+    if "website" in n: return "WhatsApp Number"
+    if any(k in n for k in ["like","view","comment","react","impression","vote","share","save"]): return "Video / Post Link"
     if any(k in n for k in ["follower","subscriber","member","channel"]): return "Account / Channel Link"
-    if "website" in n: return "Apni Business ki Detail"
     return "Link"
 
 def can_cancel(order):
