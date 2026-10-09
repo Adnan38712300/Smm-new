@@ -528,3 +528,20 @@ def edit_balance(email):
     sign = "+" if amount >= 0 else ""
     flash(f"{email} ka balance {sign}Rs {amount} → Rs {new_bal} ✔")
     return redirect(url_for("admin_panel", tab="balance"))
+
+@app.route("/admin/debug")
+@admin_required
+def debug():
+    d = load_data()
+    info = {
+        "github_token_set": bool(GH_TOKEN),
+        "github_token_len": len(GH_TOKEN),
+        "github_user": GH_USER,
+        "github_repo": GH_REPO,
+        "cache_sha": _memory_cache.get("sha"),
+        "orders_count": len(d.get("orders", [])),
+        "payments_count": len(d.get("payments", [])),
+        "users_count": len(d.get("users", {})),
+        "last_payment": d["payments"][-1] if d.get("payments") else None,
+    }
+    return jsonify(info)
