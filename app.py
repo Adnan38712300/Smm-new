@@ -499,3 +499,32 @@ except Exception as e: print("Init:", e)
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
+@app.route("/admin/user/<path:email>/edit_balance", methods=["POST"])
+@admin_required
+def edit_balance(email):
+    d = load_data()
+    if email not in d["users"]:
+        flash("User nahi mila")
+        return redirect(url_for("admin_panel", tab="balance"))
+    try:
+        amount = float(request.form.get("amount", 0))
+    except:
+        flash("Ghalat amount")
+        return redirect(url_for("admin_panel", tab="balance"))
+    reason = request.form.get("reason", "Manual adjustment").strip() or "Manual adjustment"
+    cur = d["users"][email].get("balance", 0)
+    new_bal = round(cur + amount, 2)
+    if new_bal < 0:
+        new_bal = 0
+    d["users"][email]["balance"] = new_bal
+    if "balance_history" not in d["users"][email]:
+        d["users"][email]["balance_history"] = []
+    d["users"][email]["balance_history"].append({
+        "amount": amount, "old": cur, "new": new_bal,
+        "reason": reason, "date": str(datetime.datetime.now())
+    })
+    save_data(d)
+    sign = "+" if amount >= 0 else ""
+    flash(f"{email} ka balance {sign}Rs {amount} → Rs {new_bal} ✔")
+    return redirect(url_for("admin_panel", tab="balance"))
