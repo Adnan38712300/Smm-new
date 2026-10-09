@@ -1,34 +1,64 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Signup — Adnan SMM</title>
-<link href="https://fonts.googleapis.com/css2?family=Amiri&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:linear-gradient(180deg,#070b18,#0d1428);color:#e8ecf4;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-.box{max-width:420px;width:100%;background:rgba(15,23,42,.95);border:1px solid rgba(34,197,94,.2);border-radius:18px;padding:32px 26px}
-.bismillah{text-align:center;font-family:'Amiri',serif;font-size:26px;color:#4ade80;margin-bottom:20px}
-.logo{width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,#2dd4bf,#22c55e);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:28px;color:#0a1024;margin:0 auto 16px}
-h2{color:#fff;text-align:center;margin-bottom:6px;font-size:22px}
-.sub{color:#94a3b8;text-align:center;font-size:13px;margin-bottom:26px}
-label{display:block;color:#cbd5e1;font-size:13px;font-weight:600;margin:14px 0 6px}
-input{width:100%;padding:13px;background:#0a1024;border:1px solid rgba(34,197,94,.3);border-radius:10px;color:#fff;font-size:15px;font-family:inherit}
-input:focus{outline:none;border-color:#22c55e}
-button{width:100%;padding:14px;background:linear-gradient(135deg,#22c55e,#16a34a);border:0;border-radius:10px;color:#fff;font-size:16px;font-weight:800;cursor:pointer;margin-top:22px}
-.link{text-align:center;color:#94a3b8;font-size:13px;margin-top:18px}
-.link a{color:#22c55e;text-decoration:none;font-weight:700}
-.flash{background:rgba(239,68,68,.15);border:1px solid #ef4444;padding:10px;border-radius:8px;color:#ef4444;text-align:center;font-size:13px;margin-bottom:14px}
+body{font-family:'Inter',sans-serif;background:radial-gradient(ellipse at center,#0a1a2e 0%,#02020a 70%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;color:#fff}
+.card{position:relative;width:100%;max-width:720px;min-height:480px;border-radius:18px;overflow:hidden;background:linear-gradient(135deg,#0d9488 0%,#14b8a6 40%,#10b981 100%);box-shadow:0 0 60px rgba(34,197,94,.35),0 0 100px rgba(20,184,166,.2),0 20px 60px rgba(0,0,0,.7),inset 0 0 0 2px rgba(34,197,94,.6);border:2px solid rgba(34,197,94,.55)}
+.form-panel{position:absolute;top:0;right:0;bottom:0;width:62%;background:#0c0c0c;padding:45px 50px;display:flex;flex-direction:column;justify-content:center;clip-path:polygon(18% 0,100% 0,100% 100%,0 100%);z-index:2}
+.welcome-side{position:absolute;top:0;left:0;bottom:0;width:42%;padding:50px 20px 50px 30px;display:flex;flex-direction:column;justify-content:center;z-index:1}
+h1.title{font-size:26px;font-weight:800;color:#fff;margin-bottom:20px;letter-spacing:.5px;text-align:right}
+.field{margin-bottom:16px;position:relative}
+.field label{display:block;color:#94a3b8;font-size:11px;font-weight:600;letter-spacing:.5px;margin-bottom:6px;text-transform:uppercase}
+.field input{width:100%;background:transparent;border:0;border-bottom:1.5px solid rgba(148,163,184,.4);color:#fff;font-size:14px;padding:6px 30px 8px 0;font-family:inherit;outline:none;transition:border-color .2s}
+.field input:focus{border-bottom-color:#14b8a6}
+.field .icon{position:absolute;right:4px;bottom:10px;color:#64748b;font-size:15px}
+.btn{width:100%;padding:13px;border:0;border-radius:30px;background:linear-gradient(135deg,#14b8a6,#10b981,#059669);color:#fff;font-size:14px;font-weight:800;cursor:pointer;letter-spacing:.5px;margin-top:10px;box-shadow:0 6px 20px rgba(16,185,129,.4);transition:transform .1s,box-shadow .2s}
+.btn:active{transform:scale(.98);box-shadow:0 4px 12px rgba(16,185,129,.6)}
+.bottom{text-align:center;color:#94a3b8;font-size:12px;margin-top:18px}
+.bottom a{color:#14b8a6;text-decoration:none;font-weight:700}
+.welcome-side h2{font-size:22px;font-weight:800;color:#fff;line-height:1.25;text-shadow:0 2px 10px rgba(0,0,0,.2);text-align:left}
+.welcome-side h2 .big{display:block;font-size:28px;letter-spacing:1px;margin-top:4px}
+.welcome-side p{color:rgba(255,255,255,.85);font-size:12px;margin-top:14px;line-height:1.5;font-weight:500;text-align:left;max-width:200px}
+.flash{background:rgba(239,68,68,.15);border:1px solid #ef4444;padding:8px 12px;border-radius:8px;color:#fca5a5;font-size:12px;margin-bottom:14px;text-align:center}
+@media(max-width:640px){
+  .card{min-height:auto;max-width:400px}
+  .form-panel{position:static;width:100%;clip-path:none;padding:35px 28px}
+  .welcome-side{position:static;width:100%;padding:30px;text-align:center}
+  .welcome-side h2,.welcome-side p{text-align:center;max-width:100%}
+  h1.title{text-align:center}
+  .welcome-side h2{font-size:20px}
+  .welcome-side h2 .big{font-size:26px}
+  .card{display:flex;flex-direction:column}
+}
 </style></head><body>
-<div class="box">
-<div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-<div class="logo">A</div>
-<h2>Create Account</h2>
-<div class="sub">Adnan SMM Panel — free signup</div>
-{% with m = get_flashed_messages() %}{% if m %}{% for x in m %}<div class="flash">{{x}}</div>{% endfor %}{% endif %}{% endwith %}
-<form method="POST">
-<label>Email</label>
-<input name="email" type="email" placeholder="apna@email.com" required>
-<label>Password</label>
-<input name="password" type="password" placeholder="Password (min 4 chars)" required minlength="4">
-<button type="submit">Signup</button>
-</form>
-<div class="link">Pehle se account? <a href="/login">Login karo</a></div>
-</div></body></html>
+<div class="card">
+  <div class="welcome-side">
+    <h2>WELCOME<span class="big">Register</span></h2>
+    <p>Join us today and unlock access to your personalized dashboard</p>
+  </div>
+  <div class="form-panel">
+    <h1 class="title">Register</h1>
+    {% with m = get_flashed_messages() %}{% if m %}{% for x in m %}<div class="flash">{{x}}</div>{% endfor %}{% endif %}{% endwith %}
+    <form method="POST">
+      <div class="field">
+        <label>Username</label>
+        <input name="username" type="text" placeholder="apna_username" required maxlength="20" autocomplete="username">
+        <span class="icon">👤</span>
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input name="email" type="email" placeholder="apna@email.com" required autocomplete="email">
+        <span class="icon">✉️</span>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input name="password" type="password" placeholder="••••••••" required minlength="4" autocomplete="new-password">
+        <span class="icon">🔒</span>
+      </div>
+      <button type="submit" class="btn">Register</button>
+    </form>
+    <div class="bottom">Have an account? <a href="/login">Sign In</a></div>
+  </div>
+</div>
+</body></html>

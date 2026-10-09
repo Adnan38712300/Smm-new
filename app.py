@@ -193,24 +193,25 @@ def login():
             session["user"] = email
             return redirect(url_for("home"))
         flash("Ghalat email ya password")
-    return render_template("login.html")
+    return render_template("login.html", mode="login")
 
 @app.route("/signup", methods=["GET","POST"])
 def signup():
     if request.method == "POST":
         email = request.form.get("email","").strip().lower()
         pw = request.form.get("password","")
+        uname = request.form.get("username","").strip() or email.split("@")[0]
         d = load_data()
         if not email or not pw:
             flash("Email aur password dono chahiye"); return redirect(url_for("signup"))
         if email in d["users"]:
             flash("Ye email already registered hai. Login karo."); return redirect(url_for("login"))
-        d["users"][email] = {"pw": pw, "balance": 0, "username": email.split("@")[0], "created": str(datetime.datetime.now())}
+        d["users"][email] = {"pw": pw, "balance": 0, "username": uname, "created": str(datetime.datetime.now())}
         save_data(d)
         session.permanent = True
         session["user"] = email
         return redirect(url_for("home"))
-    return render_template("signup.html")
+    return render_template("login.html", mode="signup")
 
 @app.route("/logout")
 def logout():
