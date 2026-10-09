@@ -139,8 +139,12 @@ button{padding:9px 16px;background:linear-gradient(135deg,#22c55e,#16a34a);borde
 <td style="font-size:11px">{{p.trx_id or '—'}}</td>
 <td><span class="st st-{{p.status|replace(' ','-')}}">{{p.status}}</span></td>
 <td class="acts">
+{% if p.status in ['Pending','Paid'] %}
 <a href="/admin/payment/{{p.id}}/Received" class="a-r">✔ Received</a>
 <a href="/admin/payment/{{p.id}}/Not Received" class="a-n">✘ Reject</a>
+{% else %}
+<span style="color:#64748b;font-size:11px">— Done</span>
+{% endif %}
 </td>
 </tr>
 {% endfor %}
