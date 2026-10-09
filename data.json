@@ -197,6 +197,126 @@
       "cat": "Website",
       "name": "Make Your Own Website",
       "price": 5000
+    },
+    {
+      "id": 28,
+      "cat": "TikTok",
+      "name": "TikTok Video Save",
+      "price": 8,
+      "min_qty": 50,
+      "max_qty": 10000
+    },
+    {
+      "id": 29,
+      "cat": "TikTok",
+      "name": "TikTok Video Shares",
+      "price": 59,
+      "min_qty": 50,
+      "max_qty": 10000
+    },
+    {
+      "id": 30,
+      "cat": "TikTok",
+      "name": "TikTok Live Stream Views",
+      "price": 352,
+      "min_qty": 50,
+      "max_qty": 10000
+    },
+    {
+      "id": 31,
+      "cat": "YouTube",
+      "name": "YouTube Shares (USA)",
+      "price": 682,
+      "min_qty": 50,
+      "max_qty": 10000
+    },
+    {
+      "id": 32,
+      "cat": "YouTube",
+      "name": "YouTube Shares (UK)",
+      "price": 682,
+      "min_qty": 50,
+      "max_qty": 10000
+    },
+    {
+      "id": 33,
+      "cat": "YouTube",
+      "name": "YouTube Shares (Indonesia)",
+      "price": 682,
+      "min_qty": 50,
+      "max_qty": 10000
+    },
+    {
+      "id": 34,
+      "cat": "YouTube",
+      "name": "YouTube Shares (Japan)",
+      "price": 682,
+      "min_qty": 50,
+      "max_qty": 10000
+    },
+    {
+      "id": 35,
+      "cat": "YouTube",
+      "name": "YouTube Views from Afghanistan",
+      "price": 1452,
+      "min_qty": 50,
+      "max_qty": 10000
+    },
+    {
+      "id": 36,
+      "cat": "YouTube",
+      "name": "YouTube Views from France",
+      "price": 1452,
+      "min_qty": 50,
+      "max_qty": 10000
+    },
+    {
+      "id": 37,
+      "cat": "YouTube",
+      "name": "YouTube Short Video Views [For Monetization]",
+      "price": 2359,
+      "min_qty": 50,
+      "max_qty": 10000
+    },
+    {
+      "id": 38,
+      "cat": "YouTube",
+      "name": "YouTube Likes (Refill 30D)",
+      "price": 130,
+      "min_qty": 50,
+      "max_qty": 10000
+    },
+    {
+      "id": 39,
+      "cat": "YouTube",
+      "name": "YouTube Comments (Custom)",
+      "price": 999,
+      "min_qty": 50,
+      "max_qty": 10000
+    },
+    {
+      "id": 40,
+      "cat": "Instagram",
+      "name": "Instagram Likes + Views + Repost",
+      "price": 19,
+      "min_qty": 50,
+      "max_qty": 10000
+    },
+    {
+      "id": 41,
+      "cat": "Instagram",
+      "name": "Instagram Channel Members",
+      "price": 599,
+      "min_qty": 50,
+      "max_qty": 10000
+    },
+    {
+      "id": 42,
+      "cat": "Instagram",
+      "name": "Instagram Likes (Female Users)",
+      "price": 714,
+      "min_qty": 50,
+      "max_qty": 10000
     }
   ],
   "payments": [
