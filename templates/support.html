@@ -1,0 +1,55 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Support</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#070b18;color:#e8ecf4;min-height:100vh;padding:20px}
+.wrap{max-width:800px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+h2{color:#22c55e;font-size:20px}
+.top a{color:#22c55e;text-decoration:none;font-weight:600;font-size:13px}
+.box{background:rgba(15,23,42,.9);border:1px solid rgba(34,197,94,.2);border-radius:14px;padding:20px;margin-bottom:18px}
+h3{color:#22c55e;font-size:15px;margin-bottom:14px}
+label{display:block;color:#cbd5e1;font-size:12px;font-weight:600;margin:12px 0 6px}
+input,textarea{width:100%;padding:11px;background:#0a1024;border:1px solid rgba(34,197,94,.3);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;outline:none}
+input:focus,textarea:focus{border-color:#22c55e}
+textarea{min-height:100px;resize:vertical}
+button{padding:12px 26px;background:linear-gradient(135deg,#22c55e,#16a34a);border:0;border-radius:10px;color:#fff;font-weight:800;cursor:pointer;font-size:14px;margin-top:14px;font-family:inherit}
+.ticket{background:rgba(15,23,42,.9);border:1px solid rgba(34,197,94,.15);border-left:3px solid #22c55e;border-radius:10px;padding:14px;margin-bottom:12px}
+.ticket .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.ticket .id{color:#22c55e;font-weight:800;font-size:12px}
+.ticket .st{font-size:11px;padding:3px 10px;border-radius:12px;font-weight:700}
+.ticket .st-Open{background:rgba(250,204,21,.15);color:#facc15}
+.ticket .st-Closed{background:rgba(34,197,94,.15);color:#22c55e}
+.ticket .sub{color:#fff;font-weight:700;font-size:14px;margin-bottom:6px}
+.ticket .msg{color:#94a3b8;font-size:13px;line-height:1.5}
+.ticket .reply{background:rgba(34,197,94,.08);border-left:2px solid #22c55e;padding:10px;margin-top:10px;border-radius:6px}
+.ticket .reply .lbl{color:#22c55e;font-size:11px;font-weight:700;margin-bottom:4px}
+.flash{background:rgba(34,197,94,.15);border:1px solid #22c55e;padding:10px;border-radius:8px;color:#22c55e;text-align:center;font-size:13px;margin-bottom:14px}
+.empty{text-align:center;color:#64748b;padding:20px;font-size:13px}
+</style></head><body>
+<div class="wrap">
+<div class="top"><h2>🎫 Support</h2><a href="/">← Home</a></div>
+{% with m = get_flashed_messages() %}{% if m %}{% for x in m %}<div class="flash">{{x}}</div>{% endfor %}{% endif %}{% endwith %}
+<div class="box">
+<h3>➕ New Ticket</h3>
+<form method="POST" action="/support/new">
+<label>Subject</label>
+<input name="subject" placeholder="Masla kya hai?" required maxlength="80">
+<label>Message</label>
+<textarea name="message" placeholder="Tafseel se likho..." required></textarea>
+<button type="submit">Submit Ticket</button>
+</form>
+</div>
+<h3 style="color:#22c55e;font-size:15px;margin:20px 0 12px">Mere Tickets</h3>
+{% if tickets %}
+{% for t in tickets %}
+<div class="ticket">
+<div class="head"><span class="id">{{t.id}}</span><span class="st st-{{t.status}}">{{t.status}}</span></div>
+<div class="sub">{{t.subject}}</div>
+<div class="msg">{{t.message}}</div>
+{% if t.reply %}<div class="reply"><div class="lbl">ADMIN REPLY</div><div class="msg">{{t.reply}}</div></div>{% endif %}
+</div>
+{% endfor %}
+{% else %}<div class="empty">Abhi koi ticket nahi.</div>{% endif %}
+</div></body></html>
