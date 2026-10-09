@@ -129,8 +129,10 @@ def get_user_stats(d, user):
     total_spent = round(sum(o.get("charge",0) for o in user_orders if o.get("status") in ["Done","Complete"]), 2)
     balance = round(u.get("balance", 0), 2)
     status = "SENIOR" if total_spent > SENIOR_THRESHOLD else "JUNIOR"
+    active = len([o for o in user_orders if o.get("status") in ["Waiting","Processing","Pending"]])
     return {"total_spent": total_spent, "total_orders": 1247 + len(d["orders"]),
-            "balance": balance, "status": status, "username": u.get("username", user.split("@")[0])}
+            "balance": balance, "status": status, "active_orders": active,
+            "username": u.get("username", user.split("@")[0])}
 
 def link_label(svc):
     n = svc["name"].lower()
