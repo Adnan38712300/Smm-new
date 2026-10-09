@@ -1,4 +1,4 @@
-import os, json, secrets, datetime, shutil
+import os, json, secrets, datetime, shutil, base64, urllib.request, urllib.error
 from datetime import timedelta
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from functools import wraps
@@ -18,13 +18,70 @@ PAYMENT_METHODS = {
     "binance":   {"name": "Binance",   "number": "902574695",   "owner": "Binance ID"},
 }
 
-def get_data_path():
-    if os.path.exists("/tmp") and os.access("/tmp", os.W_OK):
-        return "/tmp/data.json"
-    return os.path.join(os.path.dirname(__file__), "data.json")
+GH_TOKEN = os.environ.get("GITHUB_TOKEN", "")
+GH_USER = os.environ.get("GITHUB_USER", "Adnan38712300")
+GH_REPO = os.environ.get("GITHUB_REPO", "smm-new")
+GH_FILE = "data.json"
+GH_API = f"https://api.github.com/repos/{GH_USER}/{GH_REPO}/contents/{GH_FILE}"
 
 DATA_FILE = os.path.join(os.path.dirname(__file__), "data.json")
-TMP_DATA = get_data_path()
+TMP_DATA = "/tmp/data.json"
+
+_memory_cache = {"data": None, "sha": None}
+
+def _gh_headers():
+    return {
+        "Authorization": f"token {GH_TOKEN}",
+        "Accept": "application/vnd.github.v3+json",
+        "User-Agent": "AdnanSMM"
+    }
+
+def gh_load():
+    if not GH_TOKEN:
+        return None
+    try:
+        req = urllib.request.Request(GH_API, headers=_gh_headers())
+        with urllib.request.urlopen(req, timeout=10) as r:
+            j = json.loads(r.read())
+            content = base64.b64decode(j["content"]).decode("utf-8")
+            _memory_cache["sha"] = j["sha"]
+            return json.loads(content)
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            _memory_cache["sha"] = None
+            return None
+        return None
+    except Exception:
+        return None
+
+def gh_save(data):
+    if not GH_TOKEN:
+        return False
+    try:
+        content = json.dumps(data, indent=2)
+        b64 = base64.b64encode(content.encode("utf-8")).decode("utf-8")
+        if not _memory_cache["sha"]:
+            gh_load()
+        body = {
+            "message": "Update data.json",
+            "content": b64,
+            "branch": "main"
+        }
+        if _memory_cache["sha"]:
+            body["sha"] = _memory_cache["sha"]
+        req = urllib.request.Request(
+            GH_API,
+            data=json.dumps(body).encode("utf-8"),
+            headers={**_gh_headers(), "Content-Type": "application/json"},
+            method="PUT"
+        )
+        with urllib.request.urlopen(req, timeout=10) as r:
+            j = json.loads(r.read())
+            _memory_cache["sha"] = j["content"]["sha"]
+        return True
+    except Exception as e:
+        print("GH save error:", e)
+        return False
 
 def init_data():
     data = {
@@ -63,22 +120,31 @@ def init_data():
     return data
 
 def load_data():
-    if not os.path.exists(TMP_DATA):
-        if TMP_DATA != DATA_FILE and os.path.exists(DATA_FILE):
-            shutil.copy(DATA_FILE, TMP_DATA)
-        else:
-            return init_data()
+    # Try GitHub first
+    gh = gh_load()
+    if gh:
+        if "payments" not in gh: gh["payments"] = []
+        if "orders" not in gh: gh["orders"] = []
+        if "users" not in gh: gh["users"] = {}
+        if "services" not in gh: gh["services"] = []
+        _memory_cache["data"] = gh
+        return gh
+    # Fallback local
+    if _memory_cache["data"]:
+        return _memory_cache["data"]
     try:
-        with open(TMP_DATA, "r") as f: d = json.load(f)
-        if "payments" not in d: d["payments"] = []
-        if "orders" not in d: d["orders"] = []
-        if "users" not in d: d["users"] = {}
-        if "services" not in d: d["services"] = []
+        with open(DATA_FILE, "r") as f:
+            d = json.load(f)
+        _memory_cache["data"] = d
         return d
-    except: return init_data()
+    except:
+        d = init_data()
+        _memory_cache["data"] = d
+        return d
 
 def save_data(d):
-    with open(TMP_DATA, "w") as f: json.dump(d, f, indent=2)
+    _memory_cache["data"] = d
+    gh_save(d)
 
 def login_required(f):
     @wraps(f)
