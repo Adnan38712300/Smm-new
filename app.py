@@ -122,7 +122,13 @@ def load_data():
 
 def save_data(d):
     _memory_cache["data"] = d
-    gh_save(d)
+    # Retry 3 times on failure
+    for i in range(3):
+        if gh_save(d):
+            break
+        # Refresh SHA and retry
+        _memory_cache["sha"] = None
+        import time; time.sleep(0.5)
 
 def login_required(f):
     @wraps(f)
@@ -241,16 +247,30 @@ def add_funds():
 @login_required
 def add_funds_next():
     method = request.form.get("method","")
-    amount = float(request.form.get("amount",0))
+    try:
+        amount = float(request.form.get("amount",0) or 0)
+    except:
+        amount = 0
     if method not in PAYMENT_METHODS or amount < 10 or amount > 10000:
-        flash("Sahi method aur amount (10-10000) daalo"); return redirect(url_for("add_funds"))
+        flash("Sahi method aur amount (10-10000) daalo")
+        return redirect(url_for("add_funds"))
     d = load_data()
+    user_email = session["user"]
+    # User missing ho to create karo
+    if user_email not in d["users"]:
+        d["users"][user_email] = {
+            "pw": "",
+            "balance": 0,
+            "username": user_email.split("@")[0],
+            "created": str(datetime.datetime.now())
+        }
+    user_obj = d["users"].get(user_email, {})
     bonus = TOPUP_BONUS_AMOUNT if amount >= TOPUP_BONUS else 0
     payid = "PAY" + datetime.datetime.now().strftime("%y%m%d") + str(secrets.token_hex(2)).upper()
     d["payments"].append({
-        "id": payid, "user": session["user"],
-        "username": d["users"][session["user"]].get("username",""),
-        "email": session["user"], "method": method, "amount": amount,
+        "id": payid, "user": user_email,
+        "username": user_obj.get("username", user_email.split("@")[0]),
+        "email": user_email, "method": method, "amount": amount,
         "bonus": bonus, "status": "Pending", "trx_id": "",
         "created": str(datetime.datetime.now())
     })
@@ -263,7 +283,7 @@ def add_funds_pay(pid):
     d = load_data()
     pay = next((p for p in d["payments"] if p["id"]==pid), None)
     if not pay: flash("Payment nahi mila"); return redirect(url_for("home"))
-    method = PAYMENT_METHODS[pay["method"]]
+    method = PAYMENT_METHODS.get(pay["method"], {"name":"JazzCash","number":"—","owner":"—"})
     user_obj = d["users"].get(session["user"], {})
     username = user_obj.get("username", session["user"].split("@")[0])
     return render_template("add_funds_pay.html", pay=pay, method=method,
@@ -314,6 +334,8 @@ def place_order():
     if not svc: return jsonify({"error":"Service nahi mili"}), 400
     charge = round((svc["price"]/1000) * qty, 2)
     user = session["user"]
+    if user not in d["users"]:
+        d["users"][user] = {"pw":"", "balance":0, "username": user.split("@")[0], "created": str(datetime.datetime.now())}
     balance = d["users"].get(user, {}).get("balance", 0)
     if balance < charge:
         return jsonify({"error":"insufficient","balance":balance,"needed":charge}), 400
