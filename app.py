@@ -2,6 +2,7 @@ import os, json, secrets, datetime, shutil, base64, urllib.request, urllib.error
 from datetime import timedelta
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from functools import wraps
+from db import get_conn, init_tables, pg_load, pg_save
 
 app = Flask(__name__)
 app.secret_key = "AdnanSMM2026SecretKey_DoNotShare_9x7k2m4p1q8w"
@@ -18,6 +19,7 @@ PAYMENT_METHODS = {
     "easypaisa": {"name": "Easypaisa", "number": "Maintenance pr", "owner": "—"},
     "binance":   {"name": "Binance",   "number": "902574695",   "owner": "Binance ID"},
 }
+DATABASE_URL = os.environ.get("DATABASE_URL", "")
 GH_TOKEN = os.environ.get("GITHUB_TOKEN", "")
 GH_USER = os.environ.get("GITHUB_USER", "Adnan38712300")
 GH_REPO = os.environ.get("GITHUB_REPO", "smm-new")
@@ -106,29 +108,23 @@ def init_data():
         ]}
 
 def load_data(force=False):
-    """Always fetch from GitHub. No memory cache."""
-    gh = gh_load()
-    if gh:
-        for k in ["payments","orders","users","services","announcements","tickets"]:
-            if k not in gh:
-                gh[k] = [] if k != "users" else {}
-        _memory_cache["data"] = gh
-        return gh
-    # GitHub fail ho gaya - local fallback
-    if _memory_cache["data"]:
-        return _memory_cache["data"]
+    """Load all data from Postgres"""
+    if not DATABASE_URL:
+        # Fallback to local if no DATABASE_URL
+        try:
+            with open(DATA_FILE) as f: return json.load(f)
+        except: return init_data()
     try:
-        with open(DATA_FILE) as f:
-            d = json.load(f)
-        for k in ["payments","orders","users","services","announcements","tickets"]:
-            if k not in d:
-                d[k] = [] if k != "users" else {}
-        _memory_cache["data"] = d
+        d = pg_load()
+        if not d.get("services"):
+            d = init_data()
+            pg_save(d)
         return d
-    except:
-        d = init_data()
-        _memory_cache["data"] = d
-        return d
+    except Exception as e:
+        print("PG load error:", e)
+        try:
+            with open(DATA_FILE) as f: return json.load(f)
+        except: return init_data()
 
 
 def save_data(d):
