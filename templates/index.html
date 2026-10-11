@@ -135,7 +135,7 @@ body{font-family:'Inter',sans-serif;color:#e8ecf4;min-height:100vh;position:rela
 <select id="svcSel" onchange="onServiceChange()">
 <option value="">-- Select Service --</option>
 {% for s in services %}
-<option value="{{s.id}}" data-cat="{{s.cat}}" data-price="{{s.price}}" data-unit="{% if 'website' in s.name.lower() %}total{% else %}per1000{% endif %}">{{s.name}} — Rs {{s.price}}{% if 'website' not in s.name.lower() %}/1000{% endif %}</option>
+<option value="{{s.id}}" data-cat="{{s.cat}}" data-price="{{s.price}}" data-per="{{s.per or 1000}}" data-min="{{s.min_qty or 50}}" data-max="{{s.max_qty or 10000}}">{{s.name}} — Rs {{s.price}}{% if (s.per or 1000) != 1 %}/{{s.per or 1000}}{% endif %}</option>
 {% endfor %}
 </select>
 <div class="hint" id="svcHint">All services</div>
@@ -227,7 +227,7 @@ function filterServices(){
 function onServiceChange(){
   var opt=document.getElementById('svcSel').selectedOptions[0];
   if(opt&&opt.value){
-    var u=opt.getAttribute('data-unit'); document.getElementById('svcHint').innerText='Price: Rs '+opt.getAttribute('data-price')+(u==='total'?' (Total)':' per 1000');
+    var per=opt.getAttribute('data-per')||1000; document.getElementById('svcHint').innerText='Price: Rs '+opt.getAttribute('data-price')+(per==1?' (Fixed)':' per '+per);
   } else { document.getElementById('svcHint').innerText='Select a service'; }
   calcCharges();
 }
@@ -237,9 +237,8 @@ function calcCharges(){
   var total=0;
   if(opt&&opt.value){
     var price=parseFloat(opt.getAttribute('data-price'))||0;
-    var unit=opt.getAttribute('data-unit');
-    if(unit==='total'){ total=price; }
-    else { total=(price/1000)*qty; }
+    var per=parseFloat(opt.getAttribute('data-per'))||1000;
+    total=(price/per)*qty;
   }
   document.getElementById('chargeVal').innerText=total.toFixed(2);
 }

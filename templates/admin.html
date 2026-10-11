@@ -98,13 +98,17 @@ button{padding:9px 16px;background:linear-gradient(135deg,#22c55e,#16a34a);borde
 {% if edit_svc %}
 <div class="edit-box">
 <h4>✏️ Editing: {{edit_svc.name}}</h4>
-<form method="POST" action="/admin/edit_service/{{edit_svc.id}}">
-<input name="cat" value="{{edit_svc.cat}}" required>
-<input name="name" value="{{edit_svc.name}}" required style="width:250px">
-<input name="price" type="number" step="0.01" value="{{edit_svc.price}}" required>
+<form method="POST" action="/admin/edit_service/{{edit_svc.id}}" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+<input name="cat" value="{{edit_svc.cat}}" placeholder="Category" required>
+<input name="name" value="{{edit_svc.name}}" placeholder="Name" required style="width:220px">
+<input name="price" type="number" step="0.01" value="{{edit_svc.price}}" placeholder="Price" required style="width:90px">
+<input name="min_qty" type="number" value="{{edit_svc.min_qty or 50}}" placeholder="Min Qty" style="width:80px">
+<input name="max_qty" type="number" value="{{edit_svc.max_qty or 10000}}" placeholder="Max Qty" style="width:90px">
+<input name="per" type="number" value="{{edit_svc.per or 1000}}" placeholder="Per" style="width:70px">
 <button type="submit">Save</button>
-<a href="/admin?tab=services" style="color:#64748b;text-decoration:none;margin-left:8px;font-size:12px">Cancel</a>
+<a href="/admin?tab=services" style="color:#64748b;text-decoration:none;font-size:12px">Cancel</a>
 </form>
+<div style="color:#64748b;font-size:11px;margin-top:6px">Min Qty = minimum order | Max Qty = maximum order | Per = 1000 (normal) ya 1 (fixed price)</div>
 </div>
 {% endif %}
 <form method="POST" action="/admin/add_service" style="margin-bottom:12px">
@@ -114,9 +118,11 @@ button{padding:9px 16px;background:linear-gradient(135deg,#22c55e,#16a34a);borde
 <button>+ Add</button>
 </form>
 <div class="overflow">
-<table><tr><th>ID</th><th>Cat</th><th>Name</th><th>Price</th><th>Edit</th><th>Del</th></tr>
+<table><tr><th>ID</th><th>Cat</th><th>Name</th><th>Price</th><th>Min-Max</th><th>Per</th><th>Edit</th><th>Del</th></tr>
 {% for s in services %}
 <tr><td>{{s.id}}</td><td>{{s.cat}}</td><td>{{s.name}}</td><td>Rs {{s.price}}</td>
+<td style="font-size:10px">{{s.min_qty or 50}}-{{s.max_qty or 10000}}</td>
+<td style="font-size:10px">/{{s.per or 1000}}</td>
 <td><a href="/admin?tab=services&edit={{s.id}}" class="edit">✏️</a></td>
 <td><a href="/admin/del_service/{{s.id}}" class="del" onclick="return confirm('Delete?')">🗑</a></td></tr>
 {% endfor %}

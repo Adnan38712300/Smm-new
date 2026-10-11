@@ -61,7 +61,7 @@ def init_data():
         "services": [
             {"id":1,"cat":"TikTok","name":"TikTok Likes Pharming System","price":495},
             {"id":2,"cat":"TikTok","name":"TikTok Pakistani Likes","price":750},
-            {"id":3,"cat":"TikTok","name":"TikTok Video For You","price":250},
+            {"id":3,"cat":"TikTok","name":"TikTok Video For You","price":599,"min_qty":1,"max_qty":1,"per":1},
             {"id":4,"cat":"TikTok","name":"TikTok Mix Followers","price":4600},
             {"id":5,"cat":"TikTok","name":"TikTok Pakistani Followers","price":2500},
             {"id":6,"cat":"TikTok","name":"TikTok Followers Dropping Possible","price":600},
@@ -101,6 +101,7 @@ def init_data():
             {"id":40,"cat":"Instagram","name":"Instagram Likes + Views + Repost","price":19,"min_qty":50,"max_qty":10000},
             {"id":41,"cat":"Instagram","name":"Instagram Channel Members","price":599,"min_qty":50,"max_qty":10000},
             {"id":42,"cat":"Instagram","name":"Instagram Likes (Female Users)","price":714,"min_qty":50,"max_qty":10000},
+            {"id":43,"cat":"TikTok","name":"TikTok Account For You (10 Videos)","price":750,"min_qty":1,"max_qty":1,"per":1},
         ]}
 
 def load_data():
@@ -488,9 +489,15 @@ def edit_service(sid):
     d = load_data()
     for s in d["services"]:
         if s["id"] == sid:
-            s["cat"] = request.form.get("cat", s["cat"])
-            s["name"] = request.form.get("name", s["name"])
-            s["price"] = float(request.form.get("price", s["price"]))
+            s["cat"] = request.form.get("cat", s.get("cat",""))
+            s["name"] = request.form.get("name", s.get("name",""))
+            try: s["price"] = float(request.form.get("price", s.get("price",0)))
+            except: pass
+            try:
+                if request.form.get("min_qty"): s["min_qty"] = int(request.form.get("min_qty"))
+                if request.form.get("max_qty"): s["max_qty"] = int(request.form.get("max_qty"))
+                if request.form.get("per"): s["per"] = int(request.form.get("per"))
+            except: pass
     save_data(d); flash("Service update ✔")
     return redirect(url_for("admin_panel", tab="services"))
 

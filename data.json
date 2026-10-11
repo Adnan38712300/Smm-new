@@ -52,7 +52,10 @@
       "id": 3,
       "cat": "TikTok",
       "name": "TikTok Video For You",
-      "price": 250
+      "price": 599,
+      "min_qty": 1,
+      "max_qty": 1,
+      "per": 1
     },
     {
       "id": 4,
@@ -319,6 +322,15 @@
       "price": 714,
       "min_qty": 50,
       "max_qty": 10000
+    },
+    {
+      "id": 43,
+      "cat": "TikTok",
+      "name": "TikTok Account For You (10 Videos)",
+      "price": 750,
+      "min_qty": 1,
+      "max_qty": 1,
+      "per": 1
     }
   ],
   "payments": [
