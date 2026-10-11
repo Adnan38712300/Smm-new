@@ -592,3 +592,8 @@ def debug():
         "last_payment": d["payments"][-1] if d.get("payments") else None,
     }
     return jsonify(info)
+
+# Google Search Console verification (public - no login)
+@app.route("/google9b8b02d760.html")
+def google_verify():
+    return "google-site-verification: google9b8b02d760.html", 200, {"Content-Type": "text/html"}
