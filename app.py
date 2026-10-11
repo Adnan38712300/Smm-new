@@ -105,9 +105,17 @@ def init_data():
             {"id":44,"cat":"Special Services","name":"TikTok Combo Pack (100 Likes + 100 Followers + 1000 Views + 25 Comments + 100 Save/Shares)","price":599,"min_qty":1,"max_qty":10,"per":1},
         ]}
 
-def load_data():
+def load_data(force=False):
+    if force:
+        _memory_cache["sha"] = None
     gh = gh_load()
     if gh:
+        user = None
+        try: user = session.get("user")
+        except: pass
+        if user and user not in gh.get("users", {}) and not force:
+            import time; time.sleep(1)
+            return load_data(force=True)
         for k in ["payments","orders","users","services","announcements","tickets"]:
             if k not in gh: gh[k] = [] if k != "users" else {}
         _memory_cache["data"] = gh
@@ -230,13 +238,20 @@ def profile():
 @login_required
 def change_password():
     d = load_data()
+    user = session["user"]
+    if user not in d["users"]:
+        d = load_data(force=True)
+    if user not in d["users"]:
+        flash("Session expire. Dobara login karo.")
+        session.clear()
+        return redirect(url_for("login"))
     old = request.form.get("old_password","")
     new = request.form.get("new_password","")
-    if d["users"][session["user"]]["pw"] != old:
+    if d["users"][user]["pw"] != old:
         flash("Purana password ghalat hai"); return redirect(url_for("home"))
     if len(new) < 4:
         flash("Naya password chhota hai"); return redirect(url_for("home"))
-    d["users"][session["user"]]["pw"] = new
+    d["users"][user]["pw"] = new
     save_data(d); flash("Password change ho gaya ✔")
     return redirect(url_for("home"))
 
@@ -258,7 +273,8 @@ def add_funds_next():
         return redirect(url_for("add_funds"))
     d = load_data()
     user_email = session["user"]
-    # User missing ho to create karo
+    if user_email not in d["users"]:
+        d = load_data(force=True)
     if user_email not in d["users"]:
         d["users"][user_email] = {
             "pw": "",
