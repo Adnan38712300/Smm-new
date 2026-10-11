@@ -102,6 +102,7 @@ def init_data():
             {"id":41,"cat":"Instagram","name":"Instagram Channel Members","price":599,"min_qty":50,"max_qty":10000},
             {"id":42,"cat":"Instagram","name":"Instagram Likes (Female Users)","price":714,"min_qty":50,"max_qty":10000},
             {"id":43,"cat":"TikTok","name":"TikTok Account For You (10 Videos)","price":750,"min_qty":1,"max_qty":1,"per":1},
+            {"id":44,"cat":"Special Services","name":"TikTok Combo Pack (100 Likes + 100 Followers + 1000 Views + 25 Comments + 100 Save/Shares)","price":599,"min_qty":1,"max_qty":1,"per":1},
         ]}
 
 def load_data():
