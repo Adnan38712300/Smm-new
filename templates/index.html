@@ -257,10 +257,14 @@ function showError(title,msg){
 function placeOrder(){
   var sid=document.getElementById('svcSel').value;
   var link=document.getElementById('linkInput').value.trim();
-  var qty=document.getElementById('qtyInput').value;
+  var qty=parseInt(document.getElementById('qtyInput').value)||0;
+  var opt=document.getElementById('svcSel').selectedOptions[0];
+  var mn=opt?(parseInt(opt.getAttribute('data-min'))||50):50;
+  var mx=opt?(parseInt(opt.getAttribute('data-max'))||10000):10000;
   if(!sid){showError('Service Missing','Pehle service select karo');return;}
   if(!link){showError('Link Missing','Link daalo');return;}
-  if(!qty||qty<100){showError('Quantity Ghalat','Min 100 quantity daalo');return;}
+  if(!qty||qty<mn){showError('Quantity Ghalat','Minimum '+mn+' daalo');return;}
+  if(qty>mx){showError('Quantity Ghalat','Maximum '+mx+' daalo');return;}
   var btn=document.getElementById('submitBtn');
   btn.disabled=true;btn.innerText='Placing...';
   var fd=new FormData();
