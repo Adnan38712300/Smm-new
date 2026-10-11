@@ -106,29 +106,30 @@ def init_data():
         ]}
 
 def load_data(force=False):
-    if force:
-        _memory_cache["sha"] = None
+    """Always fetch from GitHub. No memory cache."""
     gh = gh_load()
     if gh:
-        user = None
-        try: user = session.get("user")
-        except: pass
-        if user and user not in gh.get("users", {}) and not force:
-            import time; time.sleep(1)
-            return load_data(force=True)
         for k in ["payments","orders","users","services","announcements","tickets"]:
-            if k not in gh: gh[k] = [] if k != "users" else {}
+            if k not in gh:
+                gh[k] = [] if k != "users" else {}
         _memory_cache["data"] = gh
         return gh
-    if _memory_cache["data"]: return _memory_cache["data"]
+    # GitHub fail ho gaya - local fallback
+    if _memory_cache["data"]:
+        return _memory_cache["data"]
     try:
-        with open(DATA_FILE) as f: d = json.load(f)
+        with open(DATA_FILE) as f:
+            d = json.load(f)
         for k in ["payments","orders","users","services","announcements","tickets"]:
-            if k not in d: d[k] = [] if k != "users" else {}
+            if k not in d:
+                d[k] = [] if k != "users" else {}
         _memory_cache["data"] = d
         return d
     except:
-        d = init_data(); _memory_cache["data"] = d; return d
+        d = init_data()
+        _memory_cache["data"] = d
+        return d
+
 
 def save_data(d):
     _memory_cache["data"] = d
