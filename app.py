@@ -348,6 +348,7 @@ def place_order():
     sid = int(request.form.get("service_id"))
     link = request.form.get("link","").strip()
     qty = int(request.form.get("quantity",100))
+    note = request.form.get("note","").strip()[:300]
     svc = next((s for s in d["services"] if s["id"]==sid), None)
     if not svc: return jsonify({"error":"Service nahi mili"}), 400
     charge = round((svc["price"]/1000) * qty, 2)
@@ -365,6 +366,7 @@ def place_order():
         "username": d["users"][user].get("username", user.split("@")[0]),
         "service": svc["name"], "category": svc["cat"],
         "link": link, "qty": qty, "charge": charge,
+        "note": note,
         "status": "Waiting", "created": str(datetime.datetime.now())
     })
     save_data(d)
