@@ -3,135 +3,163 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:#070b18;color:#e8ecf4;min-height:100vh;padding:16px}
-.wrap{max-width:1200px;margin:0 auto}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px}
-h2{color:#22c55e;font-size:20px}
-.logout{color:#ef4444;text-decoration:none;font-weight:700;font-size:13px;background:rgba(239,68,68,.15);padding:6px 12px;border-radius:20px;border:1px solid #ef4444}
-.tabs{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
-.tab{padding:9px 16px;background:rgba(10,15,40,.85);border:1px solid rgba(34,197,94,.2);border-radius:10px;text-decoration:none;color:#94a3b8;font-weight:700;font-size:12px;white-space:nowrap}
-.tab.active{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border-color:#22c55e}
-h3{color:#22c55e;font-size:14px;margin:18px 0 10px;letter-spacing:1px;text-transform:uppercase}
-table{width:100%;border-collapse:collapse;background:rgba(10,15,40,.85);border-radius:10px;overflow:hidden;font-size:12px;border:1px solid rgba(34,197,94,.15)}
-th,td{padding:9px;text-align:left;border-bottom:1px solid rgba(255,255,255,.05)}
-th{background:rgba(34,197,94,.15);color:#22c55e;font-weight:700;font-size:10px;text-transform:uppercase}
-td{color:#cbd5e1}
-.st{display:inline-block;padding:3px 9px;border-radius:12px;font-size:10px;font-weight:700;white-space:nowrap}
+body{font-family:'Inter',sans-serif;background:linear-gradient(180deg,#050810 0%,#0a0f1e 100%);color:#e8ecf4;min-height:100vh;padding:14px;font-size:13px}
+.wrap{max-width:1250px;margin:0 auto}
+.topbar{display:flex;justify-content:space-between;align-items:center;background:rgba(15,23,42,.7);backdrop-filter:blur(12px);padding:14px 18px;border-radius:14px;border:1px solid rgba(34,197,94,.15);margin-bottom:16px}
+.topbar h2{color:#22c55e;font-size:18px;font-weight:800;display:flex;align-items:center;gap:10px}
+.topbar h2 .dot{width:8px;height:8px;background:#22c55e;border-radius:50%;box-shadow:0 0 10px #22c55e;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.logout{color:#ef4444;text-decoration:none;font-weight:700;font-size:12px;background:rgba(239,68,68,.12);padding:7px 14px;border-radius:20px;border:1px solid rgba(239,68,68,.4);transition:all .2s}
+.logout:hover{background:rgba(239,68,68,.25)}
+.tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
+.tab{padding:10px 16px;background:rgba(15,23,42,.7);border:1px solid rgba(255,255,255,.06);border-radius:10px;text-decoration:none;color:#94a3b8;font-weight:700;font-size:12px;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:6px}
+.tab:hover{border-color:rgba(34,197,94,.4);color:#22c55e}
+.tab.active{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border-color:#22c55e;box-shadow:0 4px 16px rgba(34,197,94,.35)}
+.tab .count{background:rgba(0,0,0,.25);padding:1px 7px;border-radius:10px;font-size:10px}
+h3{color:#22c55e;font-size:13px;margin:16px 0 10px;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+h3 .badge{background:rgba(34,197,94,.15);padding:2px 10px;border-radius:12px;font-size:11px;color:#22c55e;font-weight:800}
+.card{background:rgba(15,23,42,.6);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:16px;margin-bottom:14px;backdrop-filter:blur(10px)}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:12px;background:rgba(15,23,42,.6);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.06)}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,.04)}
+th{background:rgba(34,197,94,.08);color:#22c55e;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(34,197,94,.03)}
+.st{display:inline-block;padding:3px 10px;border-radius:14px;font-size:10px;font-weight:800;white-space:nowrap;letter-spacing:.3px}
 .st-Waiting,.st-Pending,.st-Paid,.st-Open{background:rgba(250,204,21,.15);color:#facc15}
 .st-Processing{background:rgba(168,85,247,.15);color:#c084fc}
-.st-Done,.st-Complete,.st-Received,.st-Closed{background:rgba(34,197,94,.15);color:#22c55e}
+.st-Done,.st-Complete,.st-Completed,.st-Received,.st-Closed{background:rgba(34,197,94,.15);color:#22c55e}
 .st-Cancelled,.st-Not-Received{background:rgba(239,68,68,.15);color:#ef4444}
-.acts a{padding:3px 8px;border-radius:5px;text-decoration:none;font-size:10px;font-weight:700;margin-right:2px;display:inline-block;margin-bottom:2px}
-.a-p{background:rgba(250,204,21,.2);color:#facc15}
-.a-d{background:rgba(34,197,94,.2);color:#22c55e}
-.a-c{background:rgba(239,68,68,.2);color:#ef4444}
-.a-r{background:rgba(34,197,94,.2);color:#22c55e}
-.a-n{background:rgba(239,68,68,.2);color:#ef4444}
-.oid{color:#22c55e;font-weight:700;font-size:11px}
-input,select,textarea{padding:9px;background:#0a1024;color:#fff;border:1px solid rgba(34,197,94,.3);border-radius:6px;font-size:12px;margin-right:6px;margin-bottom:6px;font-family:inherit;outline:none}
-input:focus,textarea:focus{border-color:#22c55e}
-textarea{width:100%;min-height:70px;resize:vertical}
-button{padding:9px 16px;background:linear-gradient(135deg,#22c55e,#16a34a);border:0;border-radius:6px;color:#fff;font-weight:700;cursor:pointer;font-size:12px;font-family:inherit}
-.del{color:#ef4444;text-decoration:none;font-weight:700}
-.edit{color:#60a5fa;text-decoration:none;font-weight:700;margin-right:6px}
-.empty{text-align:center;color:#64748b;padding:20px;font-size:12px;background:rgba(10,15,40,.6);border-radius:10px;border:1px dashed rgba(34,197,94,.2)}
-.flash{background:rgba(34,197,94,.15);border:1px solid #22c55e;padding:9px;border-radius:8px;margin-bottom:12px;color:#22c55e;text-align:center;font-size:12px}
-.edit-box{background:rgba(59,130,246,.08);border:1px solid #60a5fa;border-radius:10px;padding:14px;margin:10px 0}
-.edit-box h4{color:#60a5fa;font-size:13px;margin-bottom:10px}
+.acts{display:flex;gap:4px;flex-wrap:wrap}
+.acts a{padding:5px 11px;border-radius:7px;text-decoration:none;font-size:10px;font-weight:800;white-space:nowrap;border:1px solid transparent;transition:all .15s}
+.a-done{background:rgba(34,197,94,.15);color:#22c55e;border-color:rgba(34,197,94,.4)}
+.a-done:hover{background:rgba(34,197,94,.3)}
+.a-cancel{background:rgba(239,68,68,.15);color:#ef4444;border-color:rgba(239,68,68,.4)}
+.a-cancel:hover{background:rgba(239,68,68,.3)}
+.a-r{background:rgba(34,197,94,.15);color:#22c55e;border-color:rgba(34,197,94,.4)}
+.a-r:hover{background:rgba(34,197,94,.3)}
+.a-n{background:rgba(239,68,68,.15);color:#ef4444;border-color:rgba(239,68,68,.4)}
+.a-n:hover{background:rgba(239,68,68,.3)}
+.a-edit{background:rgba(96,165,250,.15);color:#60a5fa;border-color:rgba(96,165,250,.4)}
+.a-edit:hover{background:rgba(96,165,250,.3)}
+.a-del{background:rgba(239,68,68,.15);color:#ef4444;border-color:rgba(239,68,68,.4)}
+.a-del:hover{background:rgba(239,68,68,.3)}
+input,select,textarea{padding:9px 12px;background:rgba(10,15,30,.9);color:#fff;border:1px solid rgba(34,197,94,.2);border-radius:8px;font-size:12px;font-family:inherit;outline:none;transition:all .2s;margin-right:6px;margin-bottom:6px}
+input:focus,select:focus,textarea:focus{border-color:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.12)}
+textarea{width:100%;min-height:80px;resize:vertical}
+button{padding:9px 18px;background:linear-gradient(135deg,#22c55e,#16a34a);border:0;border-radius:8px;color:#fff;font-weight:800;cursor:pointer;font-size:12px;font-family:inherit;transition:all .15s;box-shadow:0 3px 10px rgba(34,197,94,.3)}
+button:hover{transform:translateY(-1px);box-shadow:0 5px 14px rgba(34,197,94,.4)}
+.flash{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.5);padding:10px 14px;border-radius:10px;margin-bottom:12px;color:#22c55e;text-align:center;font-size:12px;font-weight:600}
+.empty{text-align:center;color:#64748b;padding:28px;font-size:12px;background:rgba(15,23,42,.4);border-radius:12px;border:1px dashed rgba(34,197,94,.15)}
+.oid{color:#22c55e;font-weight:800;font-size:11px;letter-spacing:.3px}
+.user-cell{font-weight:600;color:#e2e8f0;font-size:12px}
+.email-cell{color:#64748b;font-size:10px}
 .wallet{color:#facc15;font-weight:800;font-size:12px}
-.link-cell{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:middle}
+.link-cell{max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:middle}
 .link-cell a{color:#60a5fa;text-decoration:none}
+.link-cell a:hover{text-decoration:underline}
+.msg-cell{color:#94a3b8;font-size:11px;line-height:1.4;max-width:280px}
+.reply-cell{color:#22c55e;font-size:11px;background:rgba(34,197,94,.06);padding:6px 10px;border-radius:6px;margin-top:6px;border-left:2px solid #22c55e}
 .overflow{overflow-x:auto}
-.msg{color:#94a3b8;font-size:11px;line-height:1.4;max-width:300px}
-.reply{color:#22c55e;font-size:11px;background:rgba(34,197,94,.08);padding:6px;border-radius:6px;margin-top:6px}
-.uname{color:#22c55e;font-weight:700;font-size:12px}
-.uemail{color:#94a3b8;font-size:11px}
-.bal-form{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
-.bal-form input{margin:0;font-size:11px;padding:7px}
-.bal-form button{margin:0;padding:7px 12px;font-size:11px}
-.hist{font-size:10px;color:#64748b;margin-top:4px;line-height:1.5}
-.hist span{display:inline-block;background:rgba(34,197,94,.08);padding:2px 6px;border-radius:4px;margin-right:4px;margin-top:2px}
+.edit-form{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.edit-form input{margin:0}
+.note-cell{color:#94a3b8;font-size:10px;max-width:120px;line-height:1.3}
 </style></head><body>
 <div class="wrap">
-<div class="top"><h2>⚙️ Admin Panel</h2><a href="/logout" class="logout">Logout</a></div>
+<div class="topbar">
+<h2><span class="dot"></span>⚙️ Admin Panel</h2>
+<a href="/logout" class="logout">Logout →</a>
+</div>
+
 {% with m = get_flashed_messages() %}{% if m %}{% for x in m %}<div class="flash">{{x}}</div>{% endfor %}{% endif %}{% endwith %}
+
 <div class="tabs">
-<a href="/admin?tab=orders" class="tab {% if tab=='orders' %}active{% endif %}">📦 Orders</a>
-<a href="/admin?tab=services" class="tab {% if tab=='services' %}active{% endif %}">🛠 Services</a>
-<a href="/admin?tab=payments" class="tab {% if tab=='payments' %}active{% endif %}">💵 Payments</a>
-<a href="/admin?tab=balance" class="tab {% if tab=='balance' %}active{% endif %}">💰 Balance</a>
+<a href="/admin?tab=orders" class="tab {% if tab=='orders' %}active{% endif %}">📦 Orders <span class="count">{{ orders|length }}</span></a>
+<a href="/admin?tab=services" class="tab {% if tab=='services' %}active{% endif %}">🛠 Services <span class="count">{{ services|length }}</span></a>
+<a href="/admin?tab=payments" class="tab {% if tab=='payments' %}active{% endif %}">💵 Payments <span class="count">{{ payments|length }}</span></a>
+<a href="/admin?tab=balance" class="tab {% if tab=='balance' %}active{% endif %}">💰 Balance <span class="count">{{ users|length }}</span></a>
 <a href="/admin?tab=broadcast" class="tab {% if tab=='broadcast' %}active{% endif %}">📢 Broadcast</a>
-<a href="/admin?tab=tickets" class="tab {% if tab=='tickets' %}active{% endif %}">🎫 Tickets</a>
+<a href="/admin?tab=tickets" class="tab {% if tab=='tickets' %}active{% endif %}">🎫 Tickets <span class="count">{{ tickets|length }}</span></a>
 </div>
 
 {% if tab == 'orders' %}
-<h3>📦 All Orders ({{ orders|length }})</h3>
+<h3>📦 All Orders <span class="badge">{{ orders|length }}</span></h3>
 {% if orders %}
 <div class="overflow">
 <table>
-<tr><th>ID</th><th>User</th><th>Bal</th><th>Service</th><th>Link</th><th>Qty</th><th>Note</th><th>Amt</th><th>Status</th><th>Action</th></tr>
+<tr><th>Order ID</th><th>User</th><th>Bal</th><th>Service</th><th>Link</th><th>Qty</th><th>Note</th><th>Amount</th><th>Status</th><th>Action</th></tr>
 {% for o in orders %}
 <tr>
 <td class="oid">{{o.id}}</td>
-<td>{{o.username or o.user.split("@")[0]}}</td>
+<td><div class="user-cell">{{o.username or o.user.split("@")[0]}}</div><div class="email-cell">{{o.user}}</div></td>
 <td class="wallet">Rs {{ users.get(o.user, {}).get('balance', 0) }}</td>
 <td>{{o.service}}</td>
 <td class="link-cell"><a href="{{o.link}}" target="_blank">{{o.link}}</a></td>
 <td>{{o.qty}}</td>
-<td style="font-size:11px;color:#94a3b8;max-width:150px">{{o.note or '—'}}</td>
+<td class="note-cell">{{o.note or '—'}}</td>
 <td>Rs {{o.charge}}</td>
 <td><span class="st st-{{o.status|replace(' ','-')}}">{{o.status}}</span></td>
-<td class="acts">
-<a href="/admin/order/{{o.id}}/Waiting" class="a-p">Wait</a>
-<a href="/admin/order/{{o.id}}/Processing" class="a-p" style="background:rgba(168,85,247,.2);color:#c084fc">Proc</a>
-<a href="/admin/order/{{o.id}}/Done" class="a-d">Done</a>
-<a href="/admin/order/{{o.id}}/Complete" class="a-d">Comp</a>
-<a href="/admin/order/{{o.id}}/Cancelled" class="a-c">Cancel</a>
-</td>
+<td><div class="acts">
+{% if o.status not in ['Complete','Done','Cancelled'] %}
+<a href="/admin/order/{{o.id}}/Complete" class="a-done" onclick="return confirm('Complete?')">✔ Complete</a>
+<a href="/admin/order/{{o.id}}/Cancelled" class="a-cancel" onclick="return confirm('Cancel? Balance refund hoga.')">✘ Cancel</a>
+{% else %}
+<span style="color:#475569;font-size:10px">— Done</span>
+{% endif %}
+</div></td>
 </tr>
 {% endfor %}
 </table></div>
-{% else %}<div class="empty">Koi order nahi.</div>{% endif %}
+{% else %}<div class="empty">Koi order nahi aaya.</div>{% endif %}
 {% endif %}
 
 {% if tab == 'services' %}
-<h3>🛠 Services ({{ services|length }})</h3>
+<h3>🛠 Services <span class="badge">{{ services|length }}</span></h3>
+
 {% if edit_svc %}
-<div class="edit-box">
-<h4>✏️ Editing: {{edit_svc.name}}</h4>
-<form method="POST" action="/admin/edit_service/{{edit_svc.id}}" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
-<input name="cat" value="{{edit_svc.cat}}" placeholder="Category" required>
-<input name="name" value="{{edit_svc.name}}" placeholder="Name" required style="width:220px">
+<div class="card" style="border-color:rgba(96,165,250,.4)">
+<div style="color:#60a5fa;font-weight:800;margin-bottom:12px;font-size:13px">✏️ Edit: {{edit_svc.name}}</div>
+<form method="POST" action="/admin/edit_service/{{edit_svc.id}}" class="edit-form">
+<input name="cat" value="{{edit_svc.cat}}" placeholder="Category" required style="width:120px">
+<input name="name" value="{{edit_svc.name}}" placeholder="Name" required style="width:230px">
 <input name="price" type="number" step="0.01" value="{{edit_svc.price}}" placeholder="Price" required style="width:90px">
-<input name="min_qty" type="number" value="{{edit_svc.min_qty or 50}}" placeholder="Min Qty" style="width:80px">
-<input name="max_qty" type="number" value="{{edit_svc.max_qty or 10000}}" placeholder="Max Qty" style="width:90px">
+<input name="min_qty" type="number" value="{{edit_svc.min_qty or 50}}" placeholder="Min" style="width:70px">
+<input name="max_qty" type="number" value="{{edit_svc.max_qty or 10000}}" placeholder="Max" style="width:80px">
 <input name="per" type="number" value="{{edit_svc.per or 1000}}" placeholder="Per" style="width:70px">
 <button type="submit">Save</button>
-<a href="/admin?tab=services" style="color:#64748b;text-decoration:none;font-size:12px">Cancel</a>
+<a href="/admin?tab=services" style="color:#64748b;text-decoration:none;font-size:12px;margin-left:4px">Cancel</a>
 </form>
-<div style="color:#64748b;font-size:11px;margin-top:6px">Min Qty = minimum order | Max Qty = maximum order | Per = 1000 (normal) ya 1 (fixed price)</div>
 </div>
 {% endif %}
-<form method="POST" action="/admin/add_service" style="margin-bottom:12px">
-<input name="cat" placeholder="Category" required>
+
+<div class="card">
+<form method="POST" action="/admin/add_service" class="edit-form">
+<input name="cat" placeholder="Category" required style="width:120px">
 <input name="name" placeholder="Service Name" required style="width:250px">
-<input name="price" type="number" step="0.01" placeholder="Price" required>
-<button>+ Add</button>
+<input name="price" type="number" step="0.01" placeholder="Price" required style="width:90px">
+<button>+ Add Service</button>
 </form>
+</div>
+
 <div class="overflow">
-<table><tr><th>ID</th><th>Cat</th><th>Name</th><th>Price</th><th>Min-Max</th><th>Per</th><th>Edit</th><th>Del</th></tr>
+<table>
+<tr><th>ID</th><th>Category</th><th>Name</th><th>Price</th><th>Min-Max</th><th>Per</th><th>Edit</th><th>Del</th></tr>
 {% for s in services %}
-<tr><td>{{s.id}}</td><td>{{s.cat}}</td><td>{{s.name}}</td><td>Rs {{s.price}}</td>
-<td style="font-size:10px">{{s.min_qty or 50}}-{{s.max_qty or 10000}}</td>
-<td style="font-size:10px">/{{s.per or 1000}}</td>
-<td><a href="/admin?tab=services&edit={{s.id}}" class="edit">✏️</a></td>
-<td><a href="/admin/del_service/{{s.id}}" class="del" onclick="return confirm('Delete?')">🗑</a></td></tr>
+<tr>
+<td>{{s.id}}</td>
+<td><span class="st" style="background:rgba(59,130,246,.15);color:#60a5fa">{{s.cat}}</span></td>
+<td>{{s.name}}</td>
+<td style="color:#22c55e;font-weight:700">Rs {{s.price}}</td>
+<td style="font-size:10px;color:#94a3b8">{{s.min_qty or 50}}-{{s.max_qty or 10000}}</td>
+<td style="font-size:10px;color:#94a3b8">/{{s.per or 1000}}</td>
+<td><a href="/admin?tab=services&edit={{s.id}}" class="a-edit acts a" style="padding:5px 11px;border-radius:7px;text-decoration:none;font-size:10px;font-weight:800">✏️ Edit</a></td>
+<td><a href="/admin/del_service/{{s.id}}" class="a-del acts a" style="padding:5px 11px;border-radius:7px;text-decoration:none;font-size:10px;font-weight:800" onclick="return confirm('Delete?')">🗑</a></td>
+</tr>
 {% endfor %}
 </table></div>
 {% endif %}
 
 {% if tab == 'payments' %}
-<h3>💵 Payments ({{ payments|length }})</h3>
+<h3>💵 Payments <span class="badge">{{ payments|length }}</span></h3>
 {% if payments %}
 <div class="overflow">
 <table>
@@ -139,20 +167,20 @@ button{padding:9px 16px;background:linear-gradient(135deg,#22c55e,#16a34a);borde
 {% for p in payments %}
 <tr>
 <td class="oid">{{p.id}}</td>
-<td>{{p.username or p.user.split("@")[0]}}</td>
-<td style="font-size:11px">{{p.email or p.user}}</td>
-<td>{{p.method|upper}}</td>
+<td class="user-cell">{{p.username or p.user.split("@")[0]}}</td>
+<td class="email-cell">{{p.email or p.user}}</td>
+<td><span class="st" style="background:rgba(96,165,250,.15);color:#60a5fa">{{p.method|upper}}</span></td>
 <td class="wallet">Rs {{p.amount}}{% if p.bonus %} <span style="color:#facc15;font-size:10px">+{{p.bonus}}</span>{% endif %}</td>
-<td style="font-size:11px">{{p.trx_id or '—'}}</td>
+<td style="font-size:10px;color:#94a3b8">{{p.trx_id or '—'}}</td>
 <td><span class="st st-{{p.status|replace(' ','-')}}">{{p.status}}</span></td>
-<td class="acts">
+<td><div class="acts">
 {% if p.status in ['Pending','Paid'] %}
-<a href="/admin/payment/{{p.id}}/Received" class="a-r">✔ Received</a>
-<a href="/admin/payment/{{p.id}}/Not Received" class="a-n">✘ Reject</a>
+<a href="/admin/payment/{{p.id}}/Received" class="a-r" onclick="return confirm('Receive? Balance add hoga.')">✔ Received</a>
+<a href="/admin/payment/{{p.id}}/Not Received" class="a-n" onclick="return confirm('Reject?')">✘ Reject</a>
 {% else %}
-<span style="color:#64748b;font-size:11px">— Done</span>
+<span style="color:#475569;font-size:10px">— Done</span>
 {% endif %}
-</td>
+</div></td>
 </tr>
 {% endfor %}
 </table></div>
@@ -160,31 +188,24 @@ button{padding:9px 16px;background:linear-gradient(135deg,#22c55e,#16a34a);borde
 {% endif %}
 
 {% if tab == 'balance' %}
-<h3>💰 Users Balance ({{ users|length }})</h3>
+<h3>💰 Users Balance <span class="badge">{{ users|length }}</span></h3>
 {% if users %}
 <div class="overflow">
 <table>
-<tr><th>#</th><th>Username</th><th>Email</th><th>Balance</th><th>Edit Balance</th></tr>
+<tr><th>#</th><th>Username</th><th>Email</th><th>Balance</th><th>Adjust Balance</th></tr>
 {% for email, u in users.items() %}
 <tr>
 <td>{{loop.index}}</td>
-<td class="uname">{{ u.username or email.split("@")[0] }}</td>
-<td class="uemail">{{ email }}</td>
+<td class="user-cell">{{ u.username or email.split("@")[0] }}</td>
+<td class="email-cell">{{ email }}</td>
 <td class="wallet">Rs {{ u.balance or 0 }}</td>
 <td>
-<form method="POST" action="/admin/user/{{email}}/edit_balance" class="bal-form">
-<input name="amount" type="number" step="0.01" placeholder="+500 ya -200" required style="width:110px">
-<input name="reason" placeholder="Reason" style="width:120px">
-<button type="submit">Apply</button>
+<form method="POST" action="/admin/user/{{email}}/edit_balance" style="display:flex;gap:4px;align-items:center;flex-wrap:wrap">
+<input name="amount" type="number" step="0.01" placeholder="+500 ya -200" required style="width:120px;margin:0;font-size:11px;padding:7px">
+<input name="reason" placeholder="Reason" style="width:110px;margin:0;font-size:11px;padding:7px">
+<button type="submit" style="padding:7px 14px;font-size:11px;margin:0">Apply</button>
 </form>
-<div class="hist">+ add karo, − subtract karo</div>
-{% if u.balance_history %}
-<div class="hist">
-{% for h in u.balance_history[-3:] %}
-<span>{{h.amount}} ({{h.reason}})</span>
-{% endfor %}
-</div>
-{% endif %}
+<div style="color:#64748b;font-size:10px;margin-top:4px">+ add | − subtract</div>
 </td>
 </tr>
 {% endfor %}
@@ -194,39 +215,46 @@ button{padding:9px 16px;background:linear-gradient(135deg,#22c55e,#16a34a);borde
 
 {% if tab == 'broadcast' %}
 <h3>📢 Broadcast Announcement</h3>
-<form method="POST" action="/admin/broadcast" style="background:rgba(10,15,40,.85);padding:14px;border-radius:10px;border:1px solid rgba(34,197,94,.2);margin-bottom:14px">
-<textarea name="message" placeholder="Sab users ko message likho..." required></textarea>
-<button type="submit" style="margin-top:8px">📢 Send to All Users</button>
+<div class="card">
+<form method="POST" action="/admin/broadcast">
+<textarea name="message" placeholder="Sab users ko message likho... (homepage pe banner ke tor pe dikhega)" required></textarea>
+<button type="submit" style="margin-top:10px">📢 Send to All Users</button>
 </form>
+</div>
 {% if announcements %}
 <div class="overflow">
-<table><tr><th>Message</th><th>Date</th><th>Del</th></tr>
+<table>
+<tr><th>#</th><th>Message</th><th>Date</th><th>Del</th></tr>
 {% for a in announcements %}
-<tr><td style="max-width:400px">{{a.msg}}</td><td style="font-size:11px">{{a.created[:16]}}</td>
-<td><a href="/admin/broadcast/delete/{{loop.index0}}" class="del">🗑</a></td></tr>
+<tr>
+<td>{{loop.index}}</td>
+<td>{{a.msg}}</td>
+<td style="font-size:10px;color:#94a3b8">{{a.created[:16]}}</td>
+<td><a href="/admin/broadcast/delete/{{loop.index0}}" class="a-del" style="padding:5px 11px;border-radius:7px;text-decoration:none;font-size:10px;font-weight:800" onclick="return confirm('Delete?')">🗑</a></td>
+</tr>
 {% endfor %}
 </table></div>
 {% else %}<div class="empty">Koi announcement nahi.</div>{% endif %}
 {% endif %}
 
 {% if tab == 'tickets' %}
-<h3>🎫 Support Tickets ({{ tickets|length }})</h3>
+<h3>🎫 Support Tickets <span class="badge">{{ tickets|length }}</span></h3>
 {% if tickets %}
 <div class="overflow">
 <table>
-<tr><th>ID</th><th>Username</th><th>Subject</th><th>Message</th><th>Status</th><th>Reply</th></tr>
+<tr><th>ID</th><th>User</th><th>Subject</th><th>Message</th><th>Status</th><th>Reply</th></tr>
 {% for t in tickets %}
 <tr>
 <td class="oid">{{t.id}}</td>
-<td>{{t.username or t.user.split("@")[0]}}</td>
+<td class="user-cell">{{t.username or t.user.split("@")[0]}}</td>
 <td>{{t.subject}}</td>
-<td><div class="msg">{{t.message}}</div>{% if t.reply %}<div class="reply">✔ {{t.reply}}</div>{% endif %}</td>
+<td><div class="msg-cell">{{t.message}}</div>{% if t.reply %}<div class="reply-cell">✔ {{t.reply}}</div>{% endif %}</td>
 <td><span class="st st-{{t.status}}">{{t.status}}</span></td>
 <td>
 {% if t.status == 'Open' %}
-<form method="POST" action="/admin/ticket/{{t.id}}/reply" style="min-width:200px">
-<input name="reply" placeholder="Reply likho..." required style="width:100%;margin-bottom:4px">
-<button type="submit" style="font-size:11px;padding:6px 12px">Send</button>
+<form method="POST" action="/admin/ticket/{{t.id}}/reply" style="min-width:220px">
+<input name="reply" placeholder="Reply likho..." required style="width:100%;margin:0 0 6px 0;font-size:11px">
+<button type="submit" style="font-size:11px;padding:7px 14px">Send</button>
 </form>
 {% else %}<span style="color:#64748b;font-size:11px">Replied</span>{% endif %}
 </td>
@@ -236,4 +264,59 @@ button{padding:9px 16px;background:linear-gradient(135deg,#22c55e,#16a34a);borde
 {% else %}<div class="empty">Koi ticket nahi.</div>{% endif %}
 {% endif %}
 
-</div></body></html>
+</div>
+</body></html>
+
+{% if tab == 'broadcast' %}
+<h3>📢 Broadcast Announcement</h3>
+<div class="card">
+<form method="POST" action="/admin/broadcast">
+<textarea name="message" placeholder="Sab users ko message likho... (homepage pe banner ke tor pe dikhega)" required></textarea>
+<button type="submit" style="margin-top:10px">📢 Send to All Users</button>
+</form>
+</div>
+{% if announcements %}
+<div class="overflow">
+<table>
+<tr><th>#</th><th>Message</th><th>Date</th><th>Del</th></tr>
+{% for a in announcements %}
+<tr>
+<td>{{loop.index}}</td>
+<td>{{a.msg}}</td>
+<td style="font-size:10px;color:#94a3b8">{{a.created[:16]}}</td>
+<td><a href="/admin/broadcast/delete/{{loop.index0}}" class="a-del" style="padding:5px 11px;border-radius:7px;text-decoration:none;font-size:10px;font-weight:800" onclick="return confirm('Delete?')">🗑</a></td>
+</tr>
+{% endfor %}
+</table></div>
+{% else %}<div class="empty">Koi announcement nahi.</div>{% endif %}
+{% endif %}
+
+{% if tab == 'tickets' %}
+<h3>🎫 Support Tickets <span class="badge">{{ tickets|length }}</span></h3>
+{% if tickets %}
+<div class="overflow">
+<table>
+<tr><th>ID</th><th>User</th><th>Subject</th><th>Message</th><th>Status</th><th>Reply</th></tr>
+{% for t in tickets %}
+<tr>
+<td class="oid">{{t.id}}</td>
+<td class="user-cell">{{t.username or t.user.split("@")[0]}}</td>
+<td>{{t.subject}}</td>
+<td><div class="msg-cell">{{t.message}}</div>{% if t.reply %}<div class="reply-cell">✔ {{t.reply}}</div>{% endif %}</td>
+<td><span class="st st-{{t.status}}">{{t.status}}</span></td>
+<td>
+{% if t.status == 'Open' %}
+<form method="POST" action="/admin/ticket/{{t.id}}/reply" style="min-width:220px">
+<input name="reply" placeholder="Reply likho..." required style="width:100%;margin:0 0 6px 0;font-size:11px">
+<button type="submit" style="font-size:11px;padding:7px 14px">Send</button>
+</form>
+{% else %}<span style="color:#64748b;font-size:11px">Replied</span>{% endif %}
+</td>
+</tr>
+{% endfor %}
+</table></div>
+{% else %}<div class="empty">Koi ticket nahi.</div>{% endif %}
+{% endif %}
+
+</div>
+</body></html>
