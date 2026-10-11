@@ -227,7 +227,14 @@ function filterServices(){
 function onServiceChange(){
   var opt=document.getElementById('svcSel').selectedOptions[0];
   if(opt&&opt.value){
-    var per=opt.getAttribute('data-per')||1000; document.getElementById('svcHint').innerText='Price: Rs '+opt.getAttribute('data-price')+(per==1?' (Fixed)':' per '+per);
+    var per=opt.getAttribute('data-per')||1000;
+    var mn=opt.getAttribute('data-min')||50;
+    var mx=opt.getAttribute('data-max')||10000;
+    document.getElementById('svcHint').innerText='Price: Rs '+opt.getAttribute('data-price')+(per==1?' (Fixed)':' per '+per);
+    var ql=document.getElementById('qtyLabel');
+    var qi=document.getElementById('qtyInput');
+    if(ql) ql.innerText='Quantity (min '+mn+', max '+mx+')';
+    if(qi){ qi.setAttribute('min',mn); qi.setAttribute('max',mx); qi.value=mn; }
   } else { document.getElementById('svcHint').innerText='Select a service'; }
   calcCharges();
 }
