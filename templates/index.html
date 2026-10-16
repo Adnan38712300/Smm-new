@@ -137,11 +137,39 @@ body{font-family:'Inter',sans-serif;color:#e8ecf4;min-height:100vh;position:rela
 
 <div class="form-group">
 <label>Category</label>
-<select id="catSel" onchange="filterServices()">
-<option value="">All Category</option>
-{% set cats = services|map(attribute='cat')|unique|list %}
-{% for c in cats %}<option value="{{c}}">{{c}}</option>{% endfor %}
-</select>
+<div id="catDropdown" style="position:relative">
+  <div id="catBtn" onclick="toggleCat()" style="width:100%;padding:13px 14px;background:#0a1024;border:1.5px solid rgba(34,197,94,.25);border-radius:10px;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between">
+    <span id="catBtnLabel" style="display:flex;align-items:center;gap:10px">🌐 All Category</span>
+    <span style="color:#22c55e">▼</span>
+  </div>
+  <div id="catMenu" style="display:none;position:absolute;top:100%;left:0;right:0;background:#0a1024;border:1.5px solid rgba(34,197,94,.3);border-radius:10px;margin-top:6px;z-index:100;max-height:300px;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,.6)">
+    <div onclick="pickCat('', 'All Category')" style="padding:12px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.05)" onmouseover="this.style.background='rgba(34,197,94,.1)'" onmouseout="this.style.background='transparent'">
+      <span style="font-size:20px">🌐</span><span>All Category</span>
+    </div>
+    {% set logos = {
+      'TikTok':'https://cdn.simpleicons.org/tiktok/ffffff',
+      'Instagram':'https://cdn.simpleicons.org/instagram/E4405F',
+      'YouTube':'https://cdn.simpleicons.org/youtube/FF0000',
+      'Facebook':'https://cdn.simpleicons.org/facebook/1877F2',
+      'Twitter':'https://cdn.simpleicons.org/x/ffffff',
+      'Telegram':'https://cdn.simpleicons.org/telegram/26A5E4',
+      'WhatsApp':'https://cdn.simpleicons.org/whatsapp/25D366',
+      'LinkedIn':'https://cdn.simpleicons.org/linkedin/0A66C2',
+      'Twitch':'https://cdn.simpleicons.org/twitch/9146FF',
+      'Spotify':'https://cdn.simpleicons.org/spotify/1DB954',
+      'Website':'https://cdn.simpleicons.org/googlechrome/4285F4',
+      'Other':'https://cdn.simpleicons.org/lightning/FFD700'
+    } %}
+    {% set cats = services|map(attribute='cat')|unique|list %}
+    {% for c in cats %}
+    <div onclick="pickCat('{{c}}', '{{c}}')" style="padding:12px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.05)" onmouseover="this.style.background='rgba(34,197,94,.1)'" onmouseout="this.style.background='transparent'">
+      <img src="{{ logos.get(c,'') }}" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'">
+      <span>{{c}}</span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<input type="hidden" id="catSel" value="">
 </div>
 
 <div class="form-group">
@@ -343,4 +371,23 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
+
+<script>
+function toggleCat(){
+    var m = document.getElementById('catMenu');
+    m.style.display = m.style.display === 'none' ? 'block' : 'none';
+}
+function pickCat(val, label){
+    document.getElementById('catSel').value = val;
+    document.getElementById('catBtnLabel').innerHTML = val ? label : '🌐 All Category';
+    document.getElementById('catMenu').style.display = 'none';
+    filterServices();
+}
+document.addEventListener('click', function(e){
+    var d = document.getElementById('catDropdown');
+    if(d && !d.contains(e.target)){
+        document.getElementById('catMenu').style.display = 'none';
+    }
+});
+</script>
 </body></html>
