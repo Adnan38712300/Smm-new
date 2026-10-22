@@ -205,20 +205,20 @@ body{font-family:'Inter',sans-serif;color:#e8ecf4;min-height:100vh;position:rela
 </div>
 
 <div class="form-group">
-<label>Order Notes (Optional)</label>
-<textarea id="noteInput" placeholder="Koi extra instruction? (Optional)" maxlength="300" style="width:100%;padding:13px 14px;background:#0a1024;border:1.5px solid rgba(34,197,94,.25);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;outline:none;min-height:70px;resize:vertical"></textarea>
+<label id="notesLabel">Order Notes (Optional)</label>
+<textarea id="noteInput" class="orig-notes" placeholder="Koi extra instruction? (Optional)" maxlength="300" style="width:100%;padding:13px 14px;background:#0a1024;border:1.5px solid rgba(34,197,94,.25);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;outline:none;min-height:70px;resize:vertical"></textarea>
 </div>
 
 
-<div id="websiteFields" style="display:none;">
+<div id="websiteFields" style="display:none; margin-bottom: 15px;">
     <label>WhatsApp Number</label>
-    <input type="text" id="waInput" placeholder="03XXXXXXXXX" style="margin-bottom:15px;">
+    <input type="text" id="waInput" placeholder="03XXXXXXXXX" style="width:100%;padding:13px;background:#0a1024;border:1.5px solid rgba(34,197,94,.3);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;outline:none;margin-bottom:15px;">
     
     <label>Domain Name (Optional)</label>
-    <input type="text" id="domainInput" placeholder="e.g. mywebsite.com" style="margin-bottom:15px;">
+    <input type="text" id="domainInput" placeholder="e.g. mywebsite.com" style="width:100%;padding:13px;background:#0a1024;border:1.5px solid rgba(34,197,94,.3);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;outline:none;margin-bottom:15px;">
     
-    <label>Description</label>
-    <textarea id="descInput" placeholder="Website ke baare mein tafseel likhein...">Make your own website - 1200/1
+    <label>Website Description (Edit if needed)</label>
+    <textarea id="descInput" style="width:100%;padding:13px;background:#0a1024;border:1.5px solid rgba(34,197,94,.3);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;outline:none;min-height:90px;resize:vertical;">Make your own website - 1200/1
 Note: Ye fees sirf website design ki hai. Monthly maintenance aur hosting ke liye 600/month alag se hongi.</textarea>
 </div>
 
@@ -299,25 +299,45 @@ function filterServices(){
 }
 function onServiceChange(){
     var opt = document.getElementById('svcSel').selectedOptions[0];
-    var linkLabel = document.querySelector('label[for="linkInput"], .form-group label');
     var linkInput = document.getElementById('linkInput');
+    var linkLabel = linkInput.previousElementSibling;
     var websiteFields = document.getElementById('websiteFields');
     var waInput = document.getElementById('waInput');
+    
+    var notesLabel = document.getElementById('notesLabel');
+    var noteInput = document.getElementById('noteInput');
     
     if(opt && opt.text.includes('Make your own website')){
         // Website service select hui
         if(linkInput) linkInput.style.display = 'none';
         if(linkInput) linkInput.required = false;
-        if(linkLabel && linkLabel.innerText.includes('Link')) linkLabel.style.display = 'none';
+        if(linkLabel) linkLabel.style.display = 'none';
+        
         if(websiteFields) websiteFields.style.display = 'block';
         if(waInput) waInput.required = true;
+        
+        if(notesLabel) notesLabel.style.display = 'block';
+        if(noteInput) {
+            noteInput.style.display = 'block';
+            noteInput.classList.remove('orig-notes');
+            noteInput.placeholder = "Apni marzi ki 1 service likhein (e.g. SEO, Logo Design, etc.)";
+            noteInput.value = ""; // Clear old note
+        }
     } else {
         // Normal service
         if(linkInput) linkInput.style.display = 'block';
         if(linkInput) linkInput.required = true;
         if(linkLabel) linkLabel.style.display = 'block';
+        
         if(websiteFields) websiteFields.style.display = 'none';
         if(waInput) waInput.required = false;
+        
+        if(notesLabel) notesLabel.style.display = 'block';
+        if(noteInput) {
+            noteInput.style.display = 'block';
+            noteInput.placeholder = "Koi extra instruction? (Optional)";
+            noteInput.value = "";
+        }
     }
 
   var opt=document.getElementById('svcSel').selectedOptions[0];
