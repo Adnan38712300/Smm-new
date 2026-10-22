@@ -209,6 +209,19 @@ body{font-family:'Inter',sans-serif;color:#e8ecf4;min-height:100vh;position:rela
 <textarea id="noteInput" placeholder="Koi extra instruction? (Optional)" maxlength="300" style="width:100%;padding:13px 14px;background:#0a1024;border:1.5px solid rgba(34,197,94,.25);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;outline:none;min-height:70px;resize:vertical"></textarea>
 </div>
 
+
+<div id="websiteFields" style="display:none;">
+    <label>WhatsApp Number</label>
+    <input type="text" id="waInput" placeholder="03XXXXXXXXX" style="margin-bottom:15px;">
+    
+    <label>Domain Name (Optional)</label>
+    <input type="text" id="domainInput" placeholder="e.g. mywebsite.com" style="margin-bottom:15px;">
+    
+    <label>Description</label>
+    <textarea id="descInput" placeholder="Website ke baare mein tafseel likhein...">Make your own website - 1200/1
+Note: Ye fees sirf website design ki hai. Monthly maintenance aur hosting ke liye 600/month alag se hongi.</textarea>
+</div>
+
 <div class="charges-box">
 <span class="lbl">Total Charges</span>
 <span class="amt">Rs <span id="chargeVal">0</span></span>
@@ -285,6 +298,28 @@ function filterServices(){
   calcCharges();
 }
 function onServiceChange(){
+    var opt = document.getElementById('svcSel').selectedOptions[0];
+    var linkLabel = document.querySelector('label[for="linkInput"], .form-group label');
+    var linkInput = document.getElementById('linkInput');
+    var websiteFields = document.getElementById('websiteFields');
+    var waInput = document.getElementById('waInput');
+    
+    if(opt && opt.text.includes('Make your own website')){
+        // Website service select hui
+        if(linkInput) linkInput.style.display = 'none';
+        if(linkInput) linkInput.required = false;
+        if(linkLabel && linkLabel.innerText.includes('Link')) linkLabel.style.display = 'none';
+        if(websiteFields) websiteFields.style.display = 'block';
+        if(waInput) waInput.required = true;
+    } else {
+        // Normal service
+        if(linkInput) linkInput.style.display = 'block';
+        if(linkInput) linkInput.required = true;
+        if(linkLabel) linkLabel.style.display = 'block';
+        if(websiteFields) websiteFields.style.display = 'none';
+        if(waInput) waInput.required = false;
+    }
+
   var opt=document.getElementById('svcSel').selectedOptions[0];
   if(opt&&opt.value){
     var per=opt.getAttribute('data-per')||1000;

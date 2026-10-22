@@ -344,6 +344,10 @@ def place_order():
     d = load_data()
     sid = int(request.form.get("service_id"))
     link = request.form.get("link","").strip()
+    domain = request.form.get("domain","").strip()
+    description = request.form.get("description","").strip()
+    if domain: link += f" | Domain: {domain}"
+    if description: link += f" | Desc: {description}"
     qty = int(request.form.get("quantity",100))
     note = request.form.get("note","").strip()[:300]
     svc = next((s for s in d["services"] if s["id"]==sid), None)
