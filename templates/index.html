@@ -218,7 +218,7 @@ body{font-family:'Inter',sans-serif;color:#e8ecf4;min-height:100vh;position:rela
     <input type="text" id="domainInput" placeholder="e.g. mywebsite.com" style="width:100%;padding:13px;background:#0a1024;border:1.5px solid rgba(34,197,94,.3);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;outline:none;margin-bottom:15px;">
     
     <label>Website Description (Edit if needed)</label>
-    <textarea id="descInput" style="width:100%;padding:13px;background:#0a1024;border:1.5px solid rgba(34,197,94,.3);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;outline:none;min-height:90px;resize:vertical;">Make your own website - 1200/1
+    <textarea id="descInput" readonly style="width:100%;padding:13px;background:#0a1024;border:1.5px solid rgba(34,197,94,.3);border-radius:10px;color:#94a3b8;font-size:14px;font-family:inherit;outline:none;min-height:90px;resize:none;cursor:not-allowed;">Make your own website - 1200/1
 Note: Ye fees sirf website design ki hai. Monthly maintenance aur hosting ke liye 600/month alag se hongi.</textarea>
 </div>
 
@@ -321,7 +321,8 @@ function onServiceChange(){
             noteInput.style.display = 'block';
             noteInput.classList.remove('orig-notes');
             noteInput.placeholder = "Apni marzi ki 1 service likhein (e.g. SEO, Logo Design, etc.)";
-            noteInput.value = ""; // Clear old note
+            noteInput.value = ""; 
+            noteInput.required = true; // COMPULSORY
         }
     } else {
         // Normal service
@@ -337,6 +338,7 @@ function onServiceChange(){
             noteInput.style.display = 'block';
             noteInput.placeholder = "Koi extra instruction? (Optional)";
             noteInput.value = "";
+            noteInput.required = false; // Optional for normal
         }
     }
 
