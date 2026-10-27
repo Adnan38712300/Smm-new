@@ -6,34 +6,6 @@ from db import get_conn, init_tables, pg_load, pg_save
 
 app = Flask(__name__)
 
-@app.before_request
-def block_website():
-    # Agar koi bhi page open kare to usko block karo
-    return """
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>Website Blocked</title>
-        <style>
-            body { background: #070b18; color: #fff; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; padding: 20px; }
-            .box { background: rgba(15,23,42,.9); border: 2px solid #ef4444; padding: 40px 20px; border-radius: 20px; max-width: 400px; width: 100%; box-shadow: 0 0 40px rgba(239,68,68,.3); }
-            h1 { color: #ef4444; font-size: 26px; margin-bottom: 10px; }
-            p { color: #94a3b8; font-size: 14px; line-height: 1.6; }
-        </style>
-    </head>
-    <body>
-        <div class="box">
-            <div style="font-size: 50px; margin-bottom: 10px;">🚫</div>
-            <h1>Website Blocked</h1>
-            <p style="font-size: 18px; font-weight: bold; color: #fff;">by Admin Adnan</p>
-            <p style="margin-top: 20px; font-size: 12px;">Powered by Adnan</p>
-        </div>
-    </body>
-    </html>
-    """, 403
-
 
 app.secret_key = "AdnanSMM2026SecretKey_DoNotShare_9x7k2m4p1q8w"
 app.permanent_session_lifetime = timedelta(days=365)
